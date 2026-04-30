@@ -1,0 +1,20 @@
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Light Smooth Gradient -->
+    <gradient
+        android:startColor="#7B1FA2"
+
+        android:endColor="#2196F3"
+        android:angle="270"/>
+
+    <!-- Rounded Bottom Only -->
+    <corners
+        android:topLeftRadius="20dp"
+        android:topRightRadius="20dp"
+        android:bottomLeftRadius="20dp"
+        android:bottomRightRadius="20dp"/>
+
+
+</shape>
+

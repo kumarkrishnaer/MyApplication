@@ -1,0 +1,1114 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#6200EE"
+        android:titleTextColor="#FFFFFF"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- CARD -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="6dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+<!--                    <com.google.android.material.appbar.MaterialToolbar-->
+<!--                        android:id="@+id/toolbar"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:background="#FFFFFF"-->
+<!--                        android:layout_height="80dp">-->
+
+<!--                        <ImageView-->
+<!--                            android:id="@+id/imgLogo"-->
+<!--                            android:background="#FFFFFF"-->
+<!--                            android:layout_width="120dp"-->
+<!--                            android:layout_height="120dp"-->
+<!--                            android:src="@drawable/breakdown_logo"-->
+<!--                            android:layout_marginStart="0dp"-->
+<!--                            android:layout_gravity="center_horizontal"-->
+<!--                            android:scaleType="fitStart"-->
+<!--                            android:layout_alignParentStart="true"-->
+<!--                            android:layout_centerVertical="true" />-->
+
+<!--                    </com.google.android.material.appbar.MaterialToolbar>-->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal">
+
+                        <ImageView
+                            android:id="@+id/imgLogo"
+                            android:layout_width="120dp"
+                            android:layout_height="120dp"
+                            android:src="@drawable/breakdown_logo"
+                            android:scaleType="centerInside"/>
+
+
+
+                    </LinearLayout>
+
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Date:-"
+                        android:textSize="22sp"
+                        android:textColor="#7B1FA2"
+                        android:layout_marginBottom="6dp"
+                        android:textStyle="bold"/>
+
+
+
+                    <EditText
+                        android:id="@+id/etDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/bg_input_field"
+                        android:hint="Select the Date..."
+                        android:paddingStart="12dp"
+                        android:textColor="#000000"
+                        android:drawableEnd="@android:drawable/ic_menu_my_calendar"
+                        android:textColorHint="#9E9E9E"/>
+
+
+
+                    <!-- id no -->
+                    <TextView
+                        android:text="ID No:-"
+                        android:textColor="#7B1FA2"
+                        android:textSize="22sp"
+                        android:layout_marginBottom="6dp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="12dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <EditText
+                        android:id="@+id/etIdno"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/bg_input_field"
+                        android:paddingStart="12dp"
+                        android:textColor="#000000"
+                        android:textColorHint="#9E9E9E"
+                        android:hint="Enter Your ID No"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:imeOptions="actionNext"/>
+
+                    <TextView
+                        android:text="Name:-"
+                        android:textColor="#7B1FA2"
+                        android:textStyle="bold"
+                        android:textSize="22sp"
+                        android:layout_marginBottom="6dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <EditText
+
+                        android:id="@+id/etName"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/bg_input_field"
+                        android:hint="Enter Your Name Here..."
+                        android:paddingStart="12dp"
+                        android:textColor="#000000"
+                        android:textColorHint="#9E9E9E"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:imeOptions="actionNext"/>
+
+
+
+                    <!-- station id -->
+                    <TextView
+                        android:text="Machine :-"
+                        android:textSize="22sp"
+                        android:textColor="#7B1FA2"
+                        android:layout_marginBottom="6dp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="12dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <EditText
+                        android:id="@+id/etStationId"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/bg_input_field"
+                        android:paddingStart="12dp"
+                        android:textColor="#000000"
+                        android:textColorHint="#9E9E9E"
+                        android:hint="Enter Machine Name"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:imeOptions="actionNext"/>
+
+                    <!-- shift -->
+                    <TextView
+                        android:text="Shift:-"
+                        android:textColor="#7B1FA2"
+                        android:textSize="22sp"
+                        android:layout_marginBottom="6dp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="12dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/reportLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="#9E9E9E"
+                        android:hint="Select Shift"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/dropdownReport"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_input_field"
+                            android:inputType="none"/>
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Team -->
+
+                    <TextView
+                        android:text="Team:-"
+                        android:textColor="#7B1FA2"
+                        android:textSize="22sp"
+                        android:layout_marginBottom="6dp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="12dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/reportLayout1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="#9E9E9E"
+                        android:hint="Select Team"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/dropdownteam"
+                            android:textColor="#7B1FA2"
+                            android:layout_width="match_parent"
+                            android:background="@drawable/bg_input_field"
+                            android:layout_height="wrap_content"
+                            android:inputType="none"/>
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Line -->
+
+                    <TextView
+                        android:text="line:-"
+                        android:textSize="22sp"
+                        android:textColor="#7B1FA2"
+                        android:layout_marginBottom="6dp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="12dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <EditText
+                        android:id="@+id/etLine"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/bg_input_field"
+                        android:paddingStart="12dp"
+                        android:textColor="#000000"
+                        android:textColorHint="#9E9E9E"
+                        android:hint="Enter Your Line"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:imeOptions="actionNext"/>
+
+                    <!-- Traning -->
+
+                    <TextView
+                        android:text="Training Report:-"
+                        android:textColor="#7B1FA2"
+                        android:textSize="22sp"
+                        android:layout_marginBottom="6dp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="14dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <RadioGroup
+                        android:id="@+id/radioTraining"
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <RadioButton
+                            android:id="@+id/radioTrainingNo"
+                            android:text="No"
+                            android:textSize="22sp"
+                            android:textColor="#7B1FA2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"/>
+
+                        <RadioButton
+                            android:id="@+id/radioTrainingYes"
+                            android:layout_width="wrap_content"
+                            android:textColor="#7B1FA2"
+                            android:textSize="22sp"
+                            android:layout_height="wrap_content"
+                            android:text="Yes"/>
+                    </RadioGroup>
+
+                    <!-- ❌ No Layout -->
+                    <LinearLayout
+                        android:id="@+id/layoutNo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="10dp">
+
+                        <EditText
+                            android:id="@+id/etNoReason"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:hint="Enter reason (No)"
+                            android:background="@drawable/bg_input_field"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:imeOptions="actionNext"/>
+                    </LinearLayout>
+
+
+
+                    <!-- ✅ Yes Layout -->
+                    <LinearLayout
+                        android:id="@+id/layoutYes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="10dp"
+                        android:visibility="gone">
+
+
+                        <TextView
+                            android:text="Training Type:-"
+                            android:textColor="#7B1FA2"
+                            android:textSize="22sp"
+                            android:layout_marginBottom="6dp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="14dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/TrainingType"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColorHint="#9E9E9E"
+                            android:hint="Select TrainingType"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+                            <AutoCompleteTextView
+                                android:id="@+id/etTrainingType"
+                                android:textColor="#7B1FA2"
+                                android:layout_width="match_parent"
+                                android:background="@drawable/bg_input_field"
+                                android:layout_height="50dp"
+                                android:inputType="none"/>
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
+                        <TextView
+                            android:text="Trainer Name:-"
+                            android:textColor="#7B1FA2"
+                            android:textSize="22sp"
+                            android:layout_marginBottom="6dp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="14dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <EditText
+                            android:id="@+id/etTrainerName"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:hint="Enter Trainer Name"
+                            android:background="@drawable/bg_input_field"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:imeOptions="actionNext"/>
+
+
+                        <TextView
+                            android:text="Trainer Skill Level:-"
+                            android:textColor="#7B1FA2"
+                            android:textSize="22sp"
+                            android:layout_marginBottom="6dp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="14dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/trainingskillevel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColorHint="#9E9E9E"
+                            android:hint="Select Trainer Skill Level"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+                            <AutoCompleteTextView
+                                android:id="@+id/dropdownSkilllevel"
+                                android:textColor="#7B1FA2"
+                                android:layout_width="match_parent"
+                                android:background="@drawable/bg_input_field"
+                                android:layout_height="50dp"
+                                android:inputType="none"/>
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView
+                            android:text="Station Name:-"
+                            android:textColor="#7B1FA2"
+                            android:textSize="22sp"
+                            android:layout_marginBottom="6dp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="14dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <EditText
+                            android:id="@+id/etTrainingStation"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:hint="Enter Training Station name"
+                            android:background="@drawable/bg_input_field"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:imeOptions="actionNext"/>
+
+                        <TextView
+                            android:text="Traning Covered"
+                            android:textColor="#7B1FA2"
+                            android:textSize="22sp"
+                            android:layout_marginBottom="6dp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="14dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <EditText
+                            android:id="@+id/etTraningCovered"
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:hint="Enter Learning details"
+                            android:background="@drawable/bg_input_field"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:imeOptions="actionNext"/>
+
+                        <TextView
+                            android:text="Remarks:-"
+                            android:textColor="#7B1FA2"
+                            android:textSize="22sp"
+                            android:layout_marginBottom="6dp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="14dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <EditText
+                            android:id="@+id/etTraningRemarks"
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:hint="Remarks"
+                            android:background="@drawable/bg_input_field"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:imeOptions="actionNext"/>
+                    </LinearLayout>
+
+
+
+
+
+
+
+
+                    <!-- Downtime -->
+                    <TextView
+                        android:text="Downtime:-"
+                        android:textColor="#7B1FA2"
+                        android:textSize="22sp"
+                        android:layout_marginBottom="6dp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="14dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <RadioGroup
+                        android:id="@+id/radioDowntime"
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <RadioButton
+                            android:id="@+id/radioNo"
+                            android:text="No"
+                            android:textSize="22sp"
+                            android:textColor="#7B1FA2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"/>
+
+                        <RadioButton
+                            android:id="@+id/radioYes"
+                            android:layout_width="wrap_content"
+                            android:textColor="#7B1FA2"
+                            android:textSize="22sp"
+                            android:layout_height="wrap_content"
+                            android:text="Yes"/>
+                    </RadioGroup>
+
+                    <!-- SMART DOWNTIME SECTION -->
+
+                    <LinearLayout
+                        android:id="@+id/layoutDowntime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        android:animateLayoutChanges="true">
+
+                        <!-- vendor -->
+                        <TextView
+                            android:text="Vendor:-"
+                            android:textColor="#7B1FA2"
+                            android:textSize="22sp"
+                            android:layout_marginBottom="6dp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="12dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/reportLayout5"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColorHint="#9E9E9E"
+                            android:hint="Select Vendor"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+                            <AutoCompleteTextView
+                                android:id="@+id/etVendor"
+                                android:textColor="#7B1FA2"
+                                android:layout_width="match_parent"
+                                android:background="@drawable/bg_input_field"
+                                android:layout_height="wrap_content"
+                                android:inputType="none"/>
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <!-- Machine name -->
+
+                        <TextView
+                            android:text="Machine Name/Station ID:-"
+                            android:textStyle="bold"
+                            android:textSize="22sp"
+                            android:textColor="#7B1FA2"
+                            android:layout_marginBottom="6dp"
+                            android:layout_marginTop="12dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <EditText
+                            android:id="@+id/etMachine"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:background="@drawable/bg_input_field"
+                            android:paddingStart="12dp"
+                            android:textColor="#000000"
+                            android:textColorHint="#9E9E9E"
+                            android:hint="Enter Your M/C Name"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:imeOptions="actionNext"/>
+
+
+                        <!-- issue description -->
+
+                        <TextView
+                            android:text="Issue Description:-"
+                            android:textStyle="bold"
+                            android:textSize="22sp"
+                            android:textColor="#7B1FA2"
+                            android:layout_marginBottom="6dp"
+                            android:layout_marginTop="12dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <EditText
+                            android:id="@+id/etDescription"
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:background="@drawable/bg_input_field"
+                            android:paddingStart="12dp"
+                            android:textColor="#000000"
+                            android:textColorHint="#9E9E9E"
+
+
+                            android:hint="Describe m/c Issue" />
+
+
+                        <!-- Analysis steps -->
+                        <TextView
+                            android:text="Analysis steps:-"
+                            android:textSize="22sp"
+                            android:textColor="#7B1FA2"
+                            android:layout_marginBottom="6dp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="12dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <EditText
+                            android:id="@+id/etAnalysis"
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:background="@drawable/bg_input_field"
+                            android:paddingStart="12dp"
+                            android:textColor="#000000"
+                            android:textColorHint="#9E9E9E"
+
+
+                            android:hint="Enter the Analysis steps"/>
+
+                        <!-- root cause -->
+
+                        <TextView
+                            android:text="Root Cause:-"
+                            android:textSize="22sp"
+                            android:textColor="#7B1FA2"
+                            android:layout_marginBottom="6dp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="12dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <EditText
+                            android:id="@+id/etRootCause"
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:background="@drawable/bg_input_field"
+                            android:paddingStart="12dp"
+                            android:textColor="#000000"
+                            android:textColorHint="#9E9E9E"
+
+
+                            android:hint="Enter the Root Cause"/>
+
+                        <!-- corrective cause -->
+                        <TextView
+                            android:text="corrective cause:-"
+                            android:textSize="22sp"
+                            android:textColor="#7B1FA2"
+                            android:layout_marginBottom="6dp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="12dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <EditText
+                            android:id="@+id/etCorrective"
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:background="@drawable/bg_input_field"
+                            android:paddingStart="12dp"
+                            android:textColor="#000000"
+                            android:textColorHint="#9E9E9E"
+                            android:hint="Enter the corrective cause"/>
+
+<!--                        ================ preventive maintainance =============-->
+                        <TextView
+                            android:text="PreventiveAction:-"
+                            android:textSize="22sp"
+                            android:textColor="#7B1FA2"
+                            android:layout_marginBottom="6dp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="12dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <EditText
+                            android:id="@+id/etPreventiveAction"
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:background="@drawable/bg_input_field"
+                            android:paddingStart="12dp"
+                            android:textColor="#000000"
+                            android:textColorHint="#9E9E9E"
+                            android:hint="Enter the PreventiveAction"/>
+
+                        <!-- Issue start time -->
+                        <TextView
+                            android:text="Issue start time:-"
+                            android:textSize="22sp"
+                            android:textColor="#7B1FA2"
+                            android:layout_marginBottom="6dp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="12dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+
+
+
+                        <EditText
+                            android:id="@+id/etIssuestarttime"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:background="@drawable/bg_input_field"
+                            android:paddingStart="12dp"
+                            android:textColor="#000000"
+                            android:textColorHint="#9E9E9E"
+
+
+                            android:hint="Enter the Issue start time"
+                            android:focusable="false"
+                            android:clickable="true"
+                            android:drawableEnd="@android:drawable/ic_menu_recent_history"/>
+
+                        <!-- issue end time -->
+                        <TextView
+                            android:text="issue end time:-"
+                            android:textSize="22sp"
+                            android:textColor="#7B1FA2"
+                            android:layout_marginBottom="6dp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="12dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+
+                        <EditText
+                            android:id="@+id/etIssueendtime"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:background="@drawable/bg_input_field"
+                            android:paddingStart="12dp"
+                            android:textColor="#000000"
+                            android:textColorHint="#9E9E9E"
+
+
+                            android:hint="Enter the issue end time"
+                            android:focusable="false"
+                            android:clickable="true"
+                            android:drawableEnd="@android:drawable/ic_menu_recent_history"/>
+
+                        <!-- TOTAL down time -->
+                        <TextView
+                            android:text="Total Down time:-"
+                            android:textSize="22sp"
+                            android:textColor="#7B1FA2"
+                            android:layout_marginBottom="6dp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="12dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+
+                        <EditText
+                            android:id="@+id/etTotalDowntime"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:background="@drawable/bg_input_field"
+                            android:paddingStart="12dp"
+                            android:textColor="#000000"
+                            android:textColorHint="#9E9E9E"
+
+
+                            android:hint="Total Downtime"
+                            android:focusable="false"/>
+
+                        <!-- issue handled By -->
+                        <TextView
+                            android:text="issue handled By:-"
+                            android:textSize="22sp"
+                            android:textColor="#7B1FA2"
+                            android:layout_marginBottom="6dp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="12dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/reportLayout2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColorHint="#9E9E9E"
+                            android:hint="IssuehandledBy"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+                            <AutoCompleteTextView
+                                android:id="@+id/etIssuehandledBy"
+                                android:textColor="#7B1FA2"
+                                android:layout_width="match_parent"
+                                android:background="@drawable/bg_input_field"
+                                android:layout_height="wrap_content"
+                                android:inputType="none"/>
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <!-- spare changed  -->
+                        <!--                        <TextView-->
+                        <!--                            android:text="spare changed"-->
+                        <!--                            android:textSize="22sp"-->
+                        <!--                            android:layout_marginBottom="6dp"-->
+                        <!--                            android:textStyle="bold"-->
+                        <!--                            android:layout_marginTop="12dp"-->
+                        <!--                            android:layout_width="wrap_content"-->
+                        <!--                            android:layout_height="wrap_content"/>-->
+
+                        <!--                        <EditText-->
+                        <!--                            android:id="@+id/etSparechanged"-->
+                        <!--                            android:layout_width="match_parent"-->
+                        <!--                            android:layout_height="50dp"-->
+                        <!--                            android:background="@drawable/bg_input_field"-->
+                        <!--                            android:paddingStart="12dp"-->
+                        <!--                            android:textColor="#000000"-->
+                        <!--                            android:textColorHint="#9E9E9E"-->
+
+
+                        <!--                            android:hint="Enter if spare changed"/>-->
+                        <!--                    sPARE CHANGED YES NO-->
+
+                        <TextView
+                            android:text="SPARE CHANGED * "
+                            android:textSize="22sp"
+                            android:layout_marginBottom="6dp"
+                            android:textStyle="bold"
+                            android:textColor="#7B1FA2"
+                            android:layout_marginTop="14dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <RadioGroup
+                            android:id="@+id/SpareChanged"
+                            android:orientation="horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <RadioButton
+                                android:id="@+id/SpareradioNo"
+                                android:text="No"
+                                android:textColor="#7B1FA2"
+                                android:textSize="22sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"/>
+
+                            <RadioButton
+                                android:id="@+id/SpareradioYes"
+                                android:textSize="22sp"
+                                android:textColor="#7B1FA2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Yes"/>
+                        </RadioGroup>
+
+                        <LinearLayout
+                            android:id="@+id/sparelayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone"
+                            android:animateLayoutChanges="true">
+
+                            <TextView
+                                android:text="spare:-"
+                                android:textSize="22sp"
+                                android:textColor="#7B1FA2"
+                                android:layout_marginBottom="6dp"
+                                android:textStyle="bold"
+                                android:layout_marginTop="12dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                            <EditText
+                                android:id="@+id/rgetspare"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:background="@drawable/bg_input_field"
+                                android:paddingStart="12dp"
+                                android:textColor="#000000"
+                                android:textColorHint="#9E9E9E"/>
+
+
+                        </LinearLayout>
+
+<!--                        ================== vendor skill level =======================-->
+                        <TextView
+                            android:text="Vendor Skill level:-"
+                            android:textSize="22sp"
+                            android:layout_marginBottom="6dp"
+                            android:textStyle="bold"
+                            android:textColor="#7B1FA2"
+                            android:layout_marginTop="12dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/reportLayout4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColorHint="#9E9E9E"
+                            android:hint="Vendor Skill level "
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+                            <AutoCompleteTextView
+                                android:id="@+id/etSkillLevel"
+                                android:textColor="#7B1FA2"
+                                android:layout_width="match_parent"
+                                android:background="@drawable/bg_input_field"
+                                android:layout_height="wrap_content"
+                                android:inputType="none"/>
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
+
+<!--                        ===============  issue status =================-->
+
+                        <TextView
+                            android:text="Work Status:-"
+                            android:textSize="22sp"
+                            android:textColor="#7B1FA2"
+                            android:layout_marginBottom="6dp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="12dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/reportLayout3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColorHint="#9E9E9E"
+                            android:hint="Work Status"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+                            <AutoCompleteTextView
+                                android:id="@+id/etIssueStatus"
+                                android:textColor="#7B1FA2"
+                                android:layout_width="match_parent"
+                                android:background="@drawable/bg_input_field"
+                                android:layout_height="wrap_content"
+                                android:inputType="none"/>
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <!-- foam end here  -->
+
+
+
+                    </LinearLayout>
+
+                    <!-- SAVE -->
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/btnSave"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_margin="8dp"
+                        android:layout_columnWeight="1"
+                        app:cardCornerRadius="20dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:background="@drawable/bg_shiftendbtn"
+                            android:gravity="center">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Share to Google Foam"
+                                android:gravity="center"
+                                android:textStyle="bold"
+                                android:textColor="@color/white"
+                                android:includeFontPadding="false"
+                                android:layout_marginTop="8dp"/>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+<!--                    <Button-->
+<!--                        android:id="@+id/btnSave"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="50dp"-->
+<!--                        android:text="Share to Google Foam"-->
+<!--                        android:textStyle="bold"-->
+<!--                        android:background="@drawable/rounded"-->
+<!--                        android:layout_marginTop="20dp"-->
+<!--                        android:backgroundTint="#1A237E"-->
+<!--                        android:textColor="#FFFFFF"/>-->
+
+<!--                    <Button-->
+<!--                        android:id="@+id/btnSaveLocal"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="50dp"-->
+<!--                        android:text="Save Local"-->
+<!--                        android:background="@drawable/rounded"-->
+<!--                        android:textStyle="bold"-->
+<!--                        android:layout_marginTop="10dp"-->
+<!--                        android:backgroundTint="#25D366"-->
+<!--                        android:textColor="#FFFFFF"/>-->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/btnSaveLocal"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_margin="8dp"
+                        android:layout_columnWeight="1"
+                        app:cardCornerRadius="20dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:background="@drawable/bg_purple_blue"
+                            android:gravity="center">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Save Local"
+                                android:gravity="center"
+                                android:textStyle="bold"
+                                android:textColor="@color/white"
+                                android:includeFontPadding="false"
+                                android:layout_marginTop="8dp"/>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+<!--                    <Button-->
+<!--                        android:id="@+id/btnShareWhatsApp"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="50dp"-->
+<!--                        android:text="Share via WhatsApp"-->
+<!--                        android:background="@drawable/rounded"-->
+<!--                        android:textStyle="bold"-->
+<!--                        android:layout_marginTop="10dp"-->
+<!--                        android:backgroundTint="#25D366"-->
+<!--                        android:textColor="#FFFFFF"/>-->
+
+<!--                    <Button-->
+<!--                        android:id="@+id/btnGenerateReport"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="50dp"-->
+<!--                        android:text="Download PPT"-->
+<!--                        android:background="@drawable/rounded"-->
+<!--                        android:textStyle="bold"-->
+<!--                        android:layout_marginTop="10dp"-->
+<!--                        android:backgroundTint="#25D366"-->
+<!--                        android:textColor="#FFFFFF"/>-->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/btnShareWhatsApp"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_margin="8dp"
+                        android:layout_columnWeight="1"
+                        app:cardCornerRadius="20dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:background="@drawable/rounded_bg"
+                            android:gravity="center">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Share via WhatsApp"
+                                android:gravity="center"
+                                android:textStyle="bold"
+                                android:textColor="@color/white"
+                                android:includeFontPadding="false"
+                                android:layout_marginTop="8dp"/>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/btnGenerateReport"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_margin="8dp"
+                        android:layout_columnWeight="1"
+                        app:cardCornerRadius="20dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:background="@drawable/bg_tri_color"
+                            android:gravity="center">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Download PPT"
+                                android:gravity="center"
+                                android:textStyle="bold"
+                                android:textColor="@color/black"
+                                android:includeFontPadding="false"
+                                android:layout_marginTop="8dp"/>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

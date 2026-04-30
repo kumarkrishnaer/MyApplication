@@ -1,0 +1,16 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="56dp"
+    android:height="56dp"
+    android:viewportWidth="56"
+    android:viewportHeight="56">
+
+    <!-- Blue Circle -->
+    <path
+        android:fillColor="#3F51B5"
+        android:pathData="M28,2A26,26 0,1 1,2 28A26,26 0,0 1,28 2z"/>
+
+    <!-- White Plus -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M30,18h-4v8h-8v4h8v8h4v-8h8v-4h-8z"/>
+</vector>
