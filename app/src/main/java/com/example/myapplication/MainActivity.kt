@@ -29,6 +29,8 @@ import java.util.Date
 import java.util.Locale
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
+import android.widget.Switch
+import androidx.appcompat.app.AppCompatDelegate
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,9 +45,30 @@ class MainActivity : AppCompatActivity() {
     private lateinit var db: AppDatabase
     private val firestore = FirebaseFirestore.getInstance()
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        val prefs = getSharedPreferences("ThemePrefs", MODE_PRIVATE)
+        val isDark = prefs.getBoolean("dark_mode", false)
+
+        val newMode = if (isDark)
+            AppCompatDelegate.MODE_NIGHT_YES
+        else
+            AppCompatDelegate.MODE_NIGHT_NO
+
+        // ✅ ONLY APPLY IF CHANGED (THIS FIXES FLICKER)
+        if (AppCompatDelegate.getDefaultNightMode() != newMode) {
+            AppCompatDelegate.setDefaultNightMode(newMode)
+        }
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
+
+
+        UpdateChecker.checkForUpdate(this)
 
         // ================= Views =================
         tvTodayStatus = findViewById(R.id.tvTodayStatus)
@@ -83,9 +106,8 @@ class MainActivity : AppCompatActivity() {
 
         // ================= Drawer =================
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
-        val navigationView = findViewById<NavigationView>(R.id.navigationView)
         val navMenu = findViewById<NavigationView>(R.id.navMenu)
-        val logoutBtn = navigationView.findViewById<LinearLayout>(R.id.btnLogout)
+        val logoutBtn = findViewById<LinearLayout>(R.id.btnLogout)
 
         val toggle = ActionBarDrawerToggle(
             this,
@@ -137,11 +159,42 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_about -> {
                     showAboutDialog()
                 }
+
+                R.id.nav_update -> {
+                    Toast.makeText(this, "Checking for update...", Toast.LENGTH_SHORT).show()
+                    UpdateChecker.checkForUpdate(this, true)
+                    true
+
+                }
             }
 
-            Toast.makeText(this, item.title, Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this, item.title, Toast.LENGTH_SHORT).show()
             drawerLayout.closeDrawers()
             true
+        }
+
+
+        //=======================  dark theme ===================================================
+
+        val switchTheme = findViewById<Switch>(R.id.switchTheme)
+
+        // prevent auto trigger
+        switchTheme.setOnCheckedChangeListener(null)
+        switchTheme.isChecked = isDark
+
+        switchTheme.setOnCheckedChangeListener { _, checked ->
+
+            val newMode = if (checked)
+                AppCompatDelegate.MODE_NIGHT_YES
+            else
+                AppCompatDelegate.MODE_NIGHT_NO
+
+            // ✅ prevent unnecessary recreate
+            if (AppCompatDelegate.getDefaultNightMode() == newMode) return@setOnCheckedChangeListener
+
+            prefs.edit().putBoolean("dark_mode", checked).apply()
+
+            AppCompatDelegate.setDefaultNightMode(newMode)
         }
 
         // Logout button click
@@ -167,7 +220,8 @@ class MainActivity : AppCompatActivity() {
                 .show()
         }
 
-        // ================= Bottom Navigation =================
+        // ================= Bottom Navigation ==================================================
+
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigation)
 
         bottomNav.setOnItemSelectedListener { item ->
@@ -196,7 +250,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // ================= Main Buttons =================
+        // ============================ Main Buttons ======================================================
 
         val btnUpdate = findViewById<FloatingActionButton>(R.id.btnUpdate)
         btnUpdate.setOnClickListener {
@@ -209,7 +263,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, TaskActivity::class.java))
         }
 
-        val btngoggleform = findViewById<MaterialCardView>(R.id.btngoogleform)
+        val btngoggleform = findViewById<MaterialCardView>(R.id.btnDownTime)
         btngoggleform.setOnClickListener {
             val intent = Intent(this, GoogleFormActivity::class.java)
             intent.putExtra("url", "https://sites.google.com/view/bfih-fxbl-oss/home?authuser=0")
@@ -282,7 +336,6 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-
     }
 // ===============================  end of oncreate View =================================
 
@@ -309,8 +362,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
-
 
 
     override fun onResume() {

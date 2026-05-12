@@ -6,6 +6,11 @@
         android:icon="@drawable/ic_home"
         android:title="Home"/>
 
+<!--    <item-->
+<!--        android:id="@+id/nav_theme"-->
+<!--        android:icon="@drawable/ic_theme"-->
+<!--        android:title="Theme" />-->
+
     <item
         android:id="@+id/nav_history"
         android:icon="@drawable/ic_history"
@@ -24,6 +29,11 @@
         android:id="@+id/nav_about"
         android:icon="@drawable/ic_info"
         android:title="About"/>
+
+    <item
+        android:id="@+id/nav_update"
+        android:icon="@drawable/ic_update"
+        android:title="Check For Update"/>
 
 </menu>
 <!--    android:icon="@android:drawable/ic_menu_edit"/>-->

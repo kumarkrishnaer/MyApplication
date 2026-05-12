@@ -1,5 +1,4 @@
 package com.example.myapplication
-
 import android.content.Intent
 import android.os.Bundle
 import android.widget.*
@@ -13,6 +12,15 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import androidx.appcompat.app.AlertDialog
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
+
+
 
 class TaskActivity : AppCompatActivity() {
 
@@ -35,8 +43,6 @@ class TaskActivity : AppCompatActivity() {
         val btnShare = findViewById<MaterialCardView>(R.id.btnSharetask)
         val tvPercentage = findViewById<TextView>(R.id.tvPercentage)
         val tvShift = findViewById<TextView>(R.id.tvShift)
-
-
         val switchHideName = findViewById<Switch>(R.id.switchHideName)
 
         tvShift.text = "${getShift()}"
@@ -109,53 +115,87 @@ class TaskActivity : AppCompatActivity() {
             }
         }
 
-        // ✅ Share to WhatsApp
-//        btnShare.setOnClickListener {
-//
-//            if (list.isEmpty()) {
-//                Toast.makeText(this, "No data to share", Toast.LENGTH_SHORT).show()
-//                return@setOnClickListener
-//            }
-//
-//            val message = StringBuilder()
-//
-//            message.append("📋 Attendance List\n\n")
-//            message.append(" Date: ${tvDate.text}\n\n")
-//            message.append(" Shift: ${tvShift.text}\n\n")
-//
-//
-//            list.forEachIndexed { index, person ->
-//                val status = if (person.isPresent) "Present" else "Absent"
-//                message.append("${index + 1}. ${person.name} - $status\n")
-//            }
-//
-//            val total = list.size
-//            val present = list.count { it.isPresent }
-//            val absent = total - present
-//            val percent = if (total > 0) (present * 100) / total else 0
-//
-//            message.append("\nTotal: $total")
-//            message.append("\nPresent: $present")
-//            message.append("\nAbsent: $absent")
-//            message.append("\nPresent: $percent%")
-//
-//            val remarkText = etRemark.text.toString().trim()
-//
-//            if (remarkText.isNotEmpty()) {
-//                message.append("\nRemarks:- $remarkText")
-//            }
-//
-//            val intent = Intent(Intent.ACTION_SEND)
-//            intent.type = "text/plain"
-//            intent.putExtra(Intent.EXTRA_TEXT, message.toString())
-//            intent.setPackage("com.whatsapp")
-//
-//            try {
-//                startActivity(intent)
-//            } catch (e: Exception) {
-//                Toast.makeText(this, "WhatsApp not installed", Toast.LENGTH_SHORT).show()
-//            }
-//        }
+        // ================= HEADER USER LIST =================
+
+        val etNewHeader = findViewById<EditText>(R.id.etNewHeader)
+        val btnAddHeader = findViewById<Button>(R.id.btnAddHeader)
+        val dropdownHeader = findViewById<AutoCompleteTextView>(R.id.dropdownHeader)
+        val chipGroupHeader = findViewById<ChipGroup>(R.id.chipGroupHeader)
+        val prefs = getSharedPreferences("HeaderPrefs", MODE_PRIVATE)
+        val savedHeaders = prefs.getStringSet("headers", emptySet()) ?: emptySet()
+        val headerList = savedHeaders.toMutableList()
+        val headerDropdownAdapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_dropdown_item_1line,
+            headerList
+        )
+
+        dropdownHeader.setAdapter(headerDropdownAdapter)
+
+        fun saveHeaders() {
+            prefs.edit()
+                .putStringSet("headers", headerList.toSet())
+                .apply()
+        }
+
+        fun refreshHeaderChips() {
+            chipGroupHeader.removeAllViews()
+
+            headerList.forEach { header ->
+                val chip = Chip(this)
+                chip.text = header
+                chip.isCloseIconVisible = true
+                chip.isCheckable = false
+
+                chip.setOnClickListener {
+                    dropdownHeader.setText(header, false)
+                }
+
+                chip.setOnCloseIconClickListener {
+                    headerList.remove(header)
+                    saveHeaders()
+
+                    headerDropdownAdapter.notifyDataSetChanged()
+
+                    if (dropdownHeader.text.toString() == header) {
+                        dropdownHeader.text.clear()
+                    }
+
+                    refreshHeaderChips()
+                }
+
+                chipGroupHeader.addView(chip)
+            }
+        }
+
+        refreshHeaderChips()
+
+        btnAddHeader.setOnClickListener {
+            val header = etNewHeader.text.toString().trim()
+
+            if (header.isEmpty()) {
+                etNewHeader.error = "Enter header"
+                return@setOnClickListener
+            }
+
+            if (headerList.contains(header)) {
+                etNewHeader.error = "Already added"
+                return@setOnClickListener
+            }
+
+            headerList.add(header)
+            saveHeaders()
+
+            headerDropdownAdapter.notifyDataSetChanged()
+            dropdownHeader.setText(header, false)
+
+            refreshHeaderChips()
+            etNewHeader.text.clear()
+        }
+
+
+        // ====================btn share ===============================
+
 
         btnShare.setOnClickListener {
 
@@ -166,20 +206,47 @@ class TaskActivity : AppCompatActivity() {
 
             val message = StringBuilder()
 
-            message.append("*📋 Attendance List*\n\n")
+            val selectedHeader = dropdownHeader.text.toString().trim()
+
+
+            message.append("━━━━━━━━━━━━━━━━━━━━\n")
+            if (selectedHeader.isNotEmpty()) {
+                message.append("$selectedHeader\n")
+            }
+            else {
+                message.append(" ATTENDANCE \n")
+            }
+            message.append("━━━━━━━━━━━━━━━━━━━━\n")
+
+
+//            message.append("*📋 Attendance List*\n\n")
             message.append("*Date:* ${tvDate.text}\n")
             message.append("*Shift:* ${tvShift.text}\n\n")
 
             val hideName = switchHideName.isChecked
 
             if (!hideName) {
-                message.append("```")
 
-                list.forEachIndexed { index, person ->
-                    message.append("${index + 1}. ${person.name}\n")
+                val presentList = list.filter { it.isPresent }
+                val absentList = list.filter { !it.isPresent }
+
+                var count = 1
+
+                if (presentList.isNotEmpty()) {
+                    message.append("*✅ Present List*\n")
+                    presentList.forEach {
+                        message.append("${count++}. ${it.name}\n")
+                    }
+                    message.append("\n")
                 }
 
-                message.append("```\n")
+                if (absentList.isNotEmpty()) {
+                    message.append("*❌ Absent List*\n")
+                    absentList.forEach {
+                        message.append("${count++}. ${it.name}\n")
+                    }
+                    message.append("\n")
+                }
             }
 
             val total = list.size
@@ -187,7 +254,7 @@ class TaskActivity : AppCompatActivity() {
             val absent = total - present
             val percent = if (total > 0) (present * 100) / total else 0
 
-            message.append("\n```")
+            message.append("```")
             message.append(String.format("%-10s : %d\n", "Total", total))
             message.append(String.format("%-10s : %d\n", "Present", present))
             message.append(String.format("%-10s : %d\n", "Absent", absent))
@@ -196,7 +263,7 @@ class TaskActivity : AppCompatActivity() {
 
             val remarkText = etRemark.text.toString().trim()
             if (remarkText.isNotEmpty()) {
-                message.append("\n\n*Remarks:* $remarkText")
+                message.append("\n\n $remarkText")
             }
 
             val intent = Intent(Intent.ACTION_SEND)

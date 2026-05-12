@@ -9,13 +9,13 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+//import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 class WebViewActivity : AppCompatActivity() {
 
     private lateinit var webView: WebView
     private lateinit var progressBar: ProgressBar
-    private lateinit var swipeRefresh: SwipeRefreshLayout
+//    private lateinit var swipeRefresh: SwipeRefreshLayout
 
     private var currentUrl = "https://hrmstos.bharatfih.com/"
 
@@ -26,7 +26,7 @@ class WebViewActivity : AppCompatActivity() {
 
         webView = findViewById(R.id.webView)
         progressBar = findViewById(R.id.progressBar)
-        swipeRefresh = findViewById(R.id.swipeRefresh)
+//        swipeRefresh = findViewById(R.id.swipeRefresh)
 
         currentUrl = intent.getStringExtra("url") ?: currentUrl
 
@@ -38,9 +38,9 @@ class WebViewActivity : AppCompatActivity() {
             webView.loadUrl(currentUrl)
         }
 
-        swipeRefresh.setOnRefreshListener {
-            webView.reload()
-        }
+//        swipeRefresh.setOnRefreshListener {
+//            webView.reload()
+//        }
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -101,9 +101,9 @@ class WebViewActivity : AppCompatActivity() {
                 progressBar.visibility =
                     if (newProgress < 100) View.VISIBLE else View.GONE
 
-                if (newProgress == 100) {
-                    swipeRefresh.isRefreshing = false
-                }
+//                if (newProgress == 100) {
+//                    swipeRefresh.isRefreshing = false
+//                }
             }
         }
 
@@ -132,7 +132,7 @@ class WebViewActivity : AppCompatActivity() {
                 url: String?
             ) {
                 progressBar.visibility = View.GONE
-                swipeRefresh.isRefreshing = false
+//                swipeRefresh.isRefreshing = false
             }
 
             override fun onReceivedError(
@@ -147,7 +147,7 @@ class WebViewActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    swipeRefresh.isRefreshing = false
+//                    swipeRefresh.isRefreshing = false
                     progressBar.visibility = View.GONE
                 }
             }
@@ -171,7 +171,7 @@ class WebViewActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         webView.stopLoading()
-        webView.clearHistory()
+//        webView.clearHistory()
         webView.destroy()
         super.onDestroy()
     }

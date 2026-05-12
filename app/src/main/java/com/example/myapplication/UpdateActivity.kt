@@ -1125,7 +1125,7 @@ private fun sendDataToSheet(data: WorkData) {
         .toRequestBody("application/json".toMediaType())
 
     val request = Request.Builder()
-        .url("https://script.google.com/macros/s/AKfycby_mvyDwFMcowxT-hl7sZLnkygKgm139DQmsS5pEK_eHwDQbLuZAYY5X6aW98fV7wbp/exec")
+        .url("https://script.google.com/macros/s/AKfycbxlFtpP1jKmyN-4mta3vPNyQzqKNo9j-fOgQ8w7LnOywaqFmG1WpGTHN1hmfqFWe7BhtA/exec")
         .post(body)
         .build()
 

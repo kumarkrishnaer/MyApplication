@@ -1,10 +1,56 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="24dp"
-    android:height="24dp"
+    android:width="64dp"
+    android:height="64dp"
     android:viewportWidth="24"
     android:viewportHeight="24">
 
+    <!-- Background Circle -->
     <path
         android:fillColor="#6A11CB"
-        android:pathData="M14,2H6C4.9,2 4,2.9 4,4V20C4,21.1 4.9,22 6,22H18C19.1,22 20,21.1 20,20V8L14,2ZM13,9V3.5L18.5,9H13ZM8,13H16V15H8V13ZM8,17H16V19H8V17ZM8,9H11V11H8V9Z"/>
+        android:pathData="M12,2A10,10 0,1 1,12 22A10,10 0,1 1,12 2Z"/>
+
+    <!-- Report Paper -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="
+            M8,6
+            H14
+            L17,9
+            V18
+            H8
+            Z"/>
+
+    <!-- Fold Corner -->
+    <path
+        android:fillColor="#DCDCDC"
+        android:pathData="
+            M14,6
+            V9
+            H17
+            Z"/>
+
+    <!-- Report Lines -->
+    <path
+        android:fillColor="#6A11CB"
+        android:pathData="M10,11H15V12H10Z"/>
+
+    <path
+        android:fillColor="#6A11CB"
+        android:pathData="M10,13H15V14H10Z"/>
+
+    <path
+        android:fillColor="#2575FC"
+        android:pathData="M10,15H13V16H10Z"/>
+
+    <!-- Small Graph -->
+    <path
+        android:fillColor="#2575FC"
+        android:pathData="
+            M10,18
+            L11.5,16
+            L13,17
+            L15,14
+            L16,15
+            L13.5,18
+            Z"/>
 </vector>

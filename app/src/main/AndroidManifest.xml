@@ -7,6 +7,9 @@
     <uses-permission
         android:name="android.permission.POST_NOTIFICATIONS"/>
 
+
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_logo"
@@ -35,6 +38,7 @@
             android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
+
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
@@ -75,9 +79,9 @@
         <activity android:name=".UpdateActivity" android:exported="false" />
         <activity android:name=".ViewReportActivity" android:exported="false" />
         <activity android:name=".genratePpt" android:exported="false" />
-        <activity android:name=".FaReportActivity" android:exported="false" />
         <activity android:name=".RegisterActivity" android:exported="false"  />
-        <activity android:name=".TaskActivity" android:exported="false"  />
+        <activity android:name=".TaskActivity" android:exported="false"
+                android:windowSoftInputMode="adjustResize"/>
 <!--        <activity android:name=".MyFirebaseMessagingService" android:exported="false"  />-->
         <activity android:name=".Dummy" />
 

@@ -16,4 +16,7 @@ interface PersonDao {
 
     @Query("SELECT * FROM person_table")
     suspend fun getAll(): List<Person>
+
+
+
 }

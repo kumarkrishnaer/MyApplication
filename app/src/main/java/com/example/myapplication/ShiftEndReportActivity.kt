@@ -28,7 +28,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.MediaType.Companion.toMediaType
-
+import android.content.ClipData
 class ShiftEndReportActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
@@ -102,17 +102,20 @@ class ShiftEndReportActivity : AppCompatActivity() {
 
         btnShareImage.setOnClickListener {
             lifecycleScope.launch {
+                shareReportAsImage()
                 saveAllToRoom()
                 submitAllToGoogleForm()
-                shareReportAsImage()
+
+
             }
         }
 
         btnSharePdf.setOnClickListener {
             lifecycleScope.launch {
+                shareReportAsPdf()
                 saveAllToRoom()
                 submitAllToGoogleForm()
-                shareReportAsPdf()
+
             }
 
 
@@ -184,7 +187,7 @@ class ShiftEndReportActivity : AppCompatActivity() {
             val body = json.toRequestBody("application/json".toMediaType())
 
             val request = Request.Builder()
-                .url("https://script.google.com/macros/s/AKfycbzlMRiTBYM1xHFRvFeBQoE2wEUsTvh0sbyNQNpBavoOgE72hv62LzzF4QyYmCkNXKCd/exec")
+                .url("https://script.google.com/macros/s/AKfycbxlFtpP1jKmyN-4mta3vPNyQzqKNo9j-fOgQ8w7LnOywaqFmG1WpGTHN1hmfqFWe7BhtA/exec")
                 .post(body)
                 .build()
 
@@ -226,8 +229,8 @@ class ShiftEndReportActivity : AppCompatActivity() {
     private fun getAutoShift(): String {
         val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
         return when (hour) {
-            in 6..13 -> "GD"
-            in 14..21 -> "GS"
+            in 13..17 -> "GS"
+            in 14..21 -> "GD"
             else -> "GN"
         }
     }
@@ -289,15 +292,84 @@ class ShiftEndReportActivity : AppCompatActivity() {
 //        }
 //    }
 
+//    private fun shareReportAsImage() {
+//        try {
+//            val bitmap = createReportBitmapFromData()
+//
+//            val file = File(cacheDir, "shift_report.png")
+//            val outputStream = FileOutputStream(file)
+//            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+//            outputStream.flush()
+//            outputStream.close()
+//
+//            val uri = FileProvider.getUriForFile(
+//                this,
+//                "${packageName}.provider",
+//                file
+//            )
+//
+//            val intent = Intent(Intent.ACTION_SEND)
+//            intent.type = "image/png"
+//            intent.putExtra(Intent.EXTRA_STREAM, uri)
+//            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+//
+//            startActivity(Intent.createChooser(intent, "Share Image"))
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//            Toast.makeText(this, "Image share failed", Toast.LENGTH_SHORT).show()
+//        }
+//    }
+//
+//    private fun shareReportAsPdf() {
+//        try {
+//            val bitmap = createReportBitmapFromData()
+//
+//            val document = PdfDocument()
+//            val pageInfo = PdfDocument.PageInfo.Builder(
+//                bitmap.width,
+//                bitmap.height,
+//                1
+//            ).create()
+//
+//            val page = document.startPage(pageInfo)
+//            val canvas = page.canvas
+//            canvas.drawBitmap(bitmap, 0f, 0f, null)
+//            document.finishPage(page)
+//
+//            val file = File(cacheDir, "shift_report.pdf")
+//            val fos = FileOutputStream(file)
+//            document.writeTo(fos)
+//            fos.flush()
+//            fos.close()
+//            document.close()
+//
+//            val uri = FileProvider.getUriForFile(
+//                this,
+//                "${packageName}.provider",
+//                file
+//            )
+//
+//            val intent = Intent(Intent.ACTION_SEND)
+//            intent.type = "application/pdf"
+//            intent.putExtra(Intent.EXTRA_STREAM, uri)
+//            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+//
+//            startActivity(Intent.createChooser(intent, "Share PDF"))
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//            Toast.makeText(this, "PDF share failed", Toast.LENGTH_SHORT).show()
+//        }
+//    }
+
     private fun shareReportAsImage() {
         try {
             val bitmap = createReportBitmapFromData()
 
             val file = File(cacheDir, "shift_report.png")
-            val outputStream = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-            outputStream.flush()
-            outputStream.close()
+
+            FileOutputStream(file).use { outputStream ->
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+            }
 
             val uri = FileProvider.getUriForFile(
                 this,
@@ -305,23 +377,29 @@ class ShiftEndReportActivity : AppCompatActivity() {
                 file
             )
 
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.type = "image/png"
-            intent.putExtra(Intent.EXTRA_STREAM, uri)
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                type = "image/png"
+                putExtra(Intent.EXTRA_STREAM, uri)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                clipData = ClipData.newUri(contentResolver, "Shift Report Image", uri)
+            }
 
-            startActivity(Intent.createChooser(intent, "Share Image"))
+            startActivity(Intent.createChooser(shareIntent, "Share Image"))
+
         } catch (e: Exception) {
             e.printStackTrace()
-            Toast.makeText(this, "Image share failed", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, e.message ?: "Image share failed", Toast.LENGTH_LONG).show()
         }
     }
 
     private fun shareReportAsPdf() {
+        var document: PdfDocument? = null
+
         try {
             val bitmap = createReportBitmapFromData()
 
-            val document = PdfDocument()
+            document = PdfDocument()
+
             val pageInfo = PdfDocument.PageInfo.Builder(
                 bitmap.width,
                 bitmap.height,
@@ -329,16 +407,14 @@ class ShiftEndReportActivity : AppCompatActivity() {
             ).create()
 
             val page = document.startPage(pageInfo)
-            val canvas = page.canvas
-            canvas.drawBitmap(bitmap, 0f, 0f, null)
+            page.canvas.drawBitmap(bitmap, 0f, 0f, null)
             document.finishPage(page)
 
             val file = File(cacheDir, "shift_report.pdf")
-            val fos = FileOutputStream(file)
-            document.writeTo(fos)
-            fos.flush()
-            fos.close()
-            document.close()
+
+            FileOutputStream(file).use { outputStream ->
+                document.writeTo(outputStream)
+            }
 
             val uri = FileProvider.getUriForFile(
                 this,
@@ -346,19 +422,22 @@ class ShiftEndReportActivity : AppCompatActivity() {
                 file
             )
 
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.type = "application/pdf"
-            intent.putExtra(Intent.EXTRA_STREAM, uri)
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                type = "application/pdf"
+                putExtra(Intent.EXTRA_STREAM, uri)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                clipData = ClipData.newUri(contentResolver, "Shift Report PDF", uri)
+            }
 
-            startActivity(Intent.createChooser(intent, "Share PDF"))
+            startActivity(Intent.createChooser(shareIntent, "Share PDF"))
+
         } catch (e: Exception) {
             e.printStackTrace()
-            Toast.makeText(this, "PDF share failed", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, e.message ?: "PDF share failed", Toast.LENGTH_LONG).show()
+        } finally {
+            document?.close()
         }
     }
-
-
 
     private fun createReportBitmapFromData(): Bitmap {
         val startX = 20f
