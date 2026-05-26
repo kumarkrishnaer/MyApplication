@@ -4,5 +4,6 @@
         android:startColor="#5C6BC0"
         android:endColor="#3949AB"
         android:angle="0"/>
+<!--    <solid android:color="@color/surface_bg"/>-->
 
 </shape>

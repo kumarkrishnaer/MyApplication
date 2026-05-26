@@ -23,7 +23,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
-import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -31,6 +30,9 @@ import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import android.widget.Switch
 import androidx.appcompat.app.AppCompatDelegate
+import java.text.SimpleDateFormat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,6 +43,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvLatestMessage: TextView
 
     private lateinit var imgProfile: ImageView
+    private lateinit var recyclerLog: RecyclerView
 
     private lateinit var db: AppDatabase
     private val firestore = FirebaseFirestore.getInstance()
@@ -71,11 +74,16 @@ class MainActivity : AppCompatActivity() {
         UpdateChecker.checkForUpdate(this)
 
         // ================= Views =================
+
         tvTodayStatus = findViewById(R.id.tvTodayStatus)
         tvLastUpdate = findViewById(R.id.tvLastUpdate)
         tvGreeting = findViewById(R.id.tvGreeting)
         tvLatestTitle = findViewById(R.id.tvLatestTitle)
         tvLatestMessage = findViewById(R.id.tvLatestMessage)
+
+        recyclerLog = findViewById(R.id.recyclerLog)
+
+        loadLogs()
 
         db = AppDatabase.getDatabase(applicationContext)
 
@@ -102,7 +110,9 @@ class MainActivity : AppCompatActivity() {
         // ================= Toolbar =================
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar?.title = ""
+//        supportActionBar?.title = ""
+
+
 
         // ================= Drawer =================
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
@@ -197,7 +207,7 @@ class MainActivity : AppCompatActivity() {
             AppCompatDelegate.setDefaultNightMode(newMode)
         }
 
-        // Logout button click
+        // ============================= Logout button click ==============================
         logoutBtn.setOnClickListener {
             AlertDialog.Builder(this)
                 .setTitle("Logout")
@@ -219,8 +229,7 @@ class MainActivity : AppCompatActivity() {
                 .setNegativeButton("Cancel", null)
                 .show()
         }
-
-        // ================= Bottom Navigation ==================================================
+ //========== ================= Bottom Navigation ==================================================
 
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigation)
 
@@ -231,8 +240,8 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
-                R.id.nav_tasks -> {
-                    startActivity(Intent(this, TaskActivity::class.java))
+                R.id.nav_reports -> {
+                    startActivity(Intent(this, ReportAPFormActivity::class.java))
                     true
                 }
 
@@ -286,6 +295,12 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, ShiftEndReportActivity::class.java))
         }
 
+        val btnTraningDocs = findViewById<MaterialCardView>(R.id.btnTraningDocs)
+
+        btnTraningDocs.setOnClickListener {
+            startActivity(Intent(this, TraningDocs::class.java))
+            intent.putExtra("url", "https://drive.google.com/drive/folders/1lI7N0Gt8gMjXyK2gcRId9NYz3uhIri9j")
+        }
 
 
 
@@ -298,17 +313,25 @@ class MainActivity : AppCompatActivity() {
 
             val tvUserName = headerView.findViewById<TextView>(R.id.tvUserName)
 
-            lifecycleScope.launch {
-                val lastEntry = db.workDao().getLastEntry()
+//            lifecycleScope.launch {
+//                val lastEntry = db.workDao().getLastEntry()
+//
+//                runOnUiThread {
+//                    if (lastEntry != null) {
+//                        tvUserName.text = lastEntry.name
+//                    } else {
+//                        tvUserName.text = "User"
+//                    }
+//                }
+//            }
+            val sharedPref = getSharedPreferences("LoginPrefs", MODE_PRIVATE)
 
-                runOnUiThread {
-                    if (lastEntry != null) {
-                        tvUserName.text = lastEntry.name
-                    } else {
-                        tvUserName.text = "User"
-                    }
-                }
-            }
+            val username = sharedPref.getString("username", "User")
+
+            val formattedName = username
+                ?.replaceFirstChar { it.uppercase() }
+
+            tvUserName.text = formattedName
 
             // Load saved image
             val savedUri = getSharedPreferences("UserPrefs", MODE_PRIVATE)
@@ -339,6 +362,23 @@ class MainActivity : AppCompatActivity() {
     }
 // ===============================  end of oncreate View =================================
 
+//    ==============================  logs report  ==============================
+
+    private fun loadLogs() {
+
+        val prefs = getSharedPreferences("ReportLogs", MODE_PRIVATE)
+
+        val logs = prefs.getStringSet("logs", mutableSetOf())
+            ?.toList()
+            ?.reversed()
+
+        recyclerLog.layoutManager =
+            LinearLayoutManager(this)
+
+        recyclerLog.adapter =
+            LogAdapter(logs ?: emptyList())
+    }
+
 
     private val pickImage =
         registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
@@ -368,6 +408,7 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         loadStatus()
         loadUserName()
+        loadLogs()
     }
 
     private fun loadLatestUpdate() {
@@ -433,19 +474,27 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadUserName() {
-        lifecycleScope.launch {
-            val lastEntry = db.workDao().getLastEntry()
+//    private fun loadUserName() {
+//        lifecycleScope.launch {
+//            val lastEntry = db.workDao().getLastEntry()
+//
+//            runOnUiThread {
+//                if (lastEntry != null) {
+//                    setGreeting(lastEntry.name)
+//                } else {
+//                    setGreeting("User")
+//                }
+//            }
+//        }
+//    }
+private fun loadUserName() {
 
-            runOnUiThread {
-                if (lastEntry != null) {
-                    setGreeting(lastEntry.name)
-                } else {
-                    setGreeting("User")
-                }
-            }
-        }
-    }
+    val sharedPref = getSharedPreferences("LoginPrefs", MODE_PRIVATE)
+
+    val username = sharedPref.getString("username", "User")
+
+    setGreeting(username ?: "User")
+}
 
     private fun setGreeting(name: String) {
         val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)

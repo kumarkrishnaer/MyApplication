@@ -5,7 +5,7 @@
     android:gravity="center"
     android:padding="18dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/bg_header">
+    android:background="@drawable/bg_profile_header">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imgProfile"
@@ -25,7 +25,7 @@
         android:text="Krishna"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:textColor="#222"
+        android:textColor="@color/text_primary"
         android:layout_marginTop="0dp"/>
 
 <!--    <TextView-->

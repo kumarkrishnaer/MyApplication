@@ -6,13 +6,32 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:overScrollMode="always"
-    android:background="#F8FAFC">
+    android:background="@color/screen_bg">
+
+
+
+
+
 
     <LinearLayout
         android:orientation="vertical"
         android:padding="14dp"
+        android:background="@color/surface_bg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+<!--        <com.google.android.material.appbar.MaterialToolbar-->
+<!--            android:id="@+id/toolbar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="80dp"-->
+<!--            android:background="#FFFFFF"-->
+<!--            app:titleTextColor="@android:color/white"-->
+<!--            app:navigationIcon="@drawable/ic_back">-->
+
+
+<!--        </com.google.android.material.appbar.MaterialToolbar>-->
+
+
 
         <!-- HEADER LOGO + DATE SHIFT -->
         <LinearLayout
@@ -21,6 +40,10 @@
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:padding="6dp">
+
+
+
+
 
             <ImageView
                 android:id="@+id/imgLogo"
@@ -42,7 +65,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="29 Apr 2026"
-                    android:textColor="#111827"
+                    android:textColor="@color/text_primary"
                     android:textSize="13sp"
                     android:textStyle="bold" />
 
@@ -74,7 +97,7 @@
                 android:background="@android:color/transparent"
                 android:layout_weight="1"
                 android:padding="8dp"
-                android:textColor="#111827"
+                android:textColor="@color/text_primary"
                 android:textColorHint="#9CA3AF"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content" />
@@ -95,6 +118,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:boxStrokeWidth="2dp"
             android:layout_marginBottom="6dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:hint="Select Attendance Header">
@@ -129,7 +153,7 @@
                 android:layout_height="wrap_content"
                 android:text="Hide employee name"
                 android:textSize="12sp"
-                android:textColor="#444"
+                android:textColor="@color/text_primary"
                 android:layout_marginBottom="6dp" />
         </LinearLayout>
 
@@ -149,7 +173,7 @@
                 android:background="@android:color/transparent"
                 android:layout_weight="1"
                 android:padding="8dp"
-                android:textColor="#111827"
+                android:textColor="@color/text_primary"
                 android:textColorHint="#9CA3AF"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content" />
@@ -181,7 +205,7 @@
                 android:hint="Remarks:-"
                 android:background="@android:color/transparent"
                 android:padding="6dp"
-                android:textColor="#111827"
+                android:textColor="@color/text_primary"
                 android:textColorHint="#9CA3AF"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
@@ -202,7 +226,7 @@
                 android:text="Total\n0"
                 android:gravity="center"
                 android:textStyle="bold"
-                android:textColor="#111827"
+                android:textColor="#FFFFFF"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content" />
@@ -239,6 +263,7 @@
         </LinearLayout>
 
         <!-- PRESENT / ABSENT LIST -->
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
@@ -246,6 +271,8 @@
             android:nestedScrollingEnabled="false"
             android:overScrollMode="never"
             android:layout_marginBottom="8dp" />
+
+
 
         <!-- SHARE BUTTON -->
         <com.google.android.material.card.MaterialCardView
@@ -268,7 +295,7 @@
                     android:text="Share Via WhatsApp"
                     android:gravity="center"
                     android:textStyle="bold"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_primary"
                     android:includeFontPadding="false" />
             </LinearLayout>
 

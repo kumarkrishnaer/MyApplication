@@ -29,6 +29,11 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.MediaType.Companion.toMediaType
 import android.content.ClipData
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Typeface
+import androidx.appcompat.app.AlertDialog
+
 class ShiftEndReportActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
@@ -63,6 +68,15 @@ class ShiftEndReportActivity : AppCompatActivity() {
 
         tvDate.text = "Date: $currentDate"
         tvShift.text = "Shift: $currentShift"
+
+
+        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
+
+        setSupportActionBar(toolbar)
+
+        toolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
 
         adapter = ReportAdapter(entryList) { position ->
             if (entryList.isNotEmpty()) {
@@ -99,31 +113,82 @@ class ShiftEndReportActivity : AppCompatActivity() {
 //        btnSharePdf.setOnClickListener {
 //            shareReportAsPdf()
 //        }
-
+//=================== btn image share =================================
         btnShareImage.setOnClickListener {
-            lifecycleScope.launch {
-                shareReportAsImage()
-                saveAllToRoom()
-                submitAllToGoogleForm()
 
+            AlertDialog.Builder(this)
+                .setTitle("Submit Report")
+                .setMessage("Do you want to save and upload this report to Google Sheet?")
 
-            }
+                .setPositiveButton("YES") { _, _ ->
+
+                    lifecycleScope.launch {
+                        shareReportAsImage()
+                        saveAllToRoom()
+                        submitAllToGoogleForm()
+                    }
+                }
+
+                .setNegativeButton("NO") { _, _ ->
+
+                    shareReportAsImage()
+                    saveAllToRoom()
+                    saveReportLog("Shift End Report Updated")
+
+                    Toast.makeText(
+                        this,
+                        "Only image shared",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                .show()
         }
+
+        //======================== btn pdf share =========================
+
+//        btnSharePdf.setOnClickListener {
+//            lifecycleScope.launch {
+//                shareReportAsPdf()
+//                saveAllToRoom()
+//                submitAllToGoogleForm()
+//
+//            }
+//        }
 
         btnSharePdf.setOnClickListener {
-            lifecycleScope.launch {
-                shareReportAsPdf()
-                saveAllToRoom()
-                submitAllToGoogleForm()
 
-            }
+            AlertDialog.Builder(this)
+                .setTitle("Submit Report")
+                .setMessage("Do you want to save and upload this report to Google Sheet?")
 
+                .setPositiveButton("YES") { _, _ ->
 
+                    lifecycleScope.launch {
+                        shareReportAsPdf()
+                        saveAllToRoom()
+                        submitAllToGoogleForm()
+                    }
+                }
+
+                .setNegativeButton("NO") { _, _ ->
+
+                    shareReportAsPdf()
+                    saveAllToRoom()
+
+                    Toast.makeText(
+                        this,
+                        "Only PDF shared",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                .show()
         }
 
 
-        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
+
+//        setSupportActionBar(toolbar)
 
 
         val rootLayout = findViewById<View>(R.id.rootLayout)
@@ -267,108 +332,26 @@ class ShiftEndReportActivity : AppCompatActivity() {
         }
     }
 
-//    private fun shareAllDataAsWhatsappText() {
-//        val sb = StringBuilder()
-//        sb.append("*SHIFT END REPORT*\n")
-//        sb.append("Date: $currentDate    Shift: $currentShift\n\n")
-//        sb.append("*ALL DATA (ROW & COLUMN)*\n\n")
-//        sb.append("Record | Name | ID | Station | Station No | Issue | Corrective Action | Status | Remarks\n\n")
-//
-//        entryList.forEachIndexed { index, row ->
-//            sb.append(
-//                "${index + 1} | ${row.col1} | ${row.col2} | ${row.col3} | ${row.col4} | ${row.col5} | ${row.col6} | ${row.col7} | ${row.col8}\n"
-//            )
-//        }
-//
-//        val intent = Intent(Intent.ACTION_SEND)
-//        intent.type = "text/plain"
-//        intent.setPackage("com.whatsapp")
-//        intent.putExtra(Intent.EXTRA_TEXT, sb.toString())
-//
-//        try {
-//            startActivity(intent)
-//        } catch (e: Exception) {
-//            Toast.makeText(this, "WhatsApp not installed", Toast.LENGTH_SHORT).show()
-//        }
-//    }
 
-//    private fun shareReportAsImage() {
-//        try {
-//            val bitmap = createReportBitmapFromData()
-//
-//            val file = File(cacheDir, "shift_report.png")
-//            val outputStream = FileOutputStream(file)
-//            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-//            outputStream.flush()
-//            outputStream.close()
-//
-//            val uri = FileProvider.getUriForFile(
-//                this,
-//                "${packageName}.provider",
-//                file
-//            )
-//
-//            val intent = Intent(Intent.ACTION_SEND)
-//            intent.type = "image/png"
-//            intent.putExtra(Intent.EXTRA_STREAM, uri)
-//            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-//
-//            startActivity(Intent.createChooser(intent, "Share Image"))
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//            Toast.makeText(this, "Image share failed", Toast.LENGTH_SHORT).show()
-//        }
-//    }
-//
-//    private fun shareReportAsPdf() {
-//        try {
-//            val bitmap = createReportBitmapFromData()
-//
-//            val document = PdfDocument()
-//            val pageInfo = PdfDocument.PageInfo.Builder(
-//                bitmap.width,
-//                bitmap.height,
-//                1
-//            ).create()
-//
-//            val page = document.startPage(pageInfo)
-//            val canvas = page.canvas
-//            canvas.drawBitmap(bitmap, 0f, 0f, null)
-//            document.finishPage(page)
-//
-//            val file = File(cacheDir, "shift_report.pdf")
-//            val fos = FileOutputStream(file)
-//            document.writeTo(fos)
-//            fos.flush()
-//            fos.close()
-//            document.close()
-//
-//            val uri = FileProvider.getUriForFile(
-//                this,
-//                "${packageName}.provider",
-//                file
-//            )
-//
-//            val intent = Intent(Intent.ACTION_SEND)
-//            intent.type = "application/pdf"
-//            intent.putExtra(Intent.EXTRA_STREAM, uri)
-//            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-//
-//            startActivity(Intent.createChooser(intent, "Share PDF"))
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//            Toast.makeText(this, "PDF share failed", Toast.LENGTH_SHORT).show()
-//        }
-//    }
 
     private fun shareReportAsImage() {
+
         try {
+
             val bitmap = createReportBitmapFromData()
+
+            val watermarkedBitmap =
+                addPremiumWatermark(bitmap)
 
             val file = File(cacheDir, "shift_report.png")
 
             FileOutputStream(file).use { outputStream ->
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+
+                watermarkedBitmap.compress(
+                    Bitmap.CompressFormat.PNG,
+                    100,
+                    outputStream
+                )
             }
 
             val uri = FileProvider.getUriForFile(
@@ -378,17 +361,39 @@ class ShiftEndReportActivity : AppCompatActivity() {
             )
 
             val shareIntent = Intent(Intent.ACTION_SEND).apply {
+
                 type = "image/png"
-                putExtra(Intent.EXTRA_STREAM, uri)
+
+                putExtra(
+                    Intent.EXTRA_STREAM,
+                    uri
+                )
+
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                clipData = ClipData.newUri(contentResolver, "Shift Report Image", uri)
+
+                clipData = ClipData.newUri(
+                    contentResolver,
+                    "Shift Report Image",
+                    uri
+                )
             }
 
-            startActivity(Intent.createChooser(shareIntent, "Share Image"))
+            startActivity(
+                Intent.createChooser(
+                    shareIntent,
+                    "Share Image"
+                )
+            )
 
         } catch (e: Exception) {
+
             e.printStackTrace()
-            Toast.makeText(this, e.message ?: "Image share failed", Toast.LENGTH_LONG).show()
+
+            Toast.makeText(
+                this,
+                e.message ?: "Image share failed",
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 
@@ -396,7 +401,10 @@ class ShiftEndReportActivity : AppCompatActivity() {
         var document: PdfDocument? = null
 
         try {
-            val bitmap = createReportBitmapFromData()
+            val bitmap =
+                addPremiumWatermark(
+                    createReportBitmapFromData()
+                )
 
             document = PdfDocument()
 
@@ -440,29 +448,40 @@ class ShiftEndReportActivity : AppCompatActivity() {
     }
 
     private fun createReportBitmapFromData(): Bitmap {
+
         val startX = 20f
         val startY = 40f
-        val rowHeight = 60f
+        val rowHeight = 90f
 
         val colWidths = floatArrayOf(
             60f,   // Rec
-            130f,  // Name
+            150f,  // Name
             120f,  // ID
             120f,  // Station
             120f,  // Station No
-            180f,  // Issue
+            220f,  // Issue
             220f,  // Corrective
             120f,  // Status
-            140f   // Remarks
+            120f   // Remarks
         )
 
         val headers = listOf(
-            "Rec", "Name", "ID No", "Station", "Station No",
-            "Issue", "Corrective Action", "Status", "Remarks"
+            "Rec",
+            "Name",
+            "ID No",
+            "Station",
+            "Station No",
+            "Issue",
+            "Corrective Action",
+            "Status",
+            "Remarks"
         )
 
         val totalWidth = (startX * 2 + colWidths.sum()).toInt()
-        val totalHeight = (220 + ((entryList.size + 1) * rowHeight)).toInt()
+
+        val totalHeight = (
+                250 + ((entryList.size + 1) * rowHeight)
+                ).toInt()
 
         val bitmap = Bitmap.createBitmap(
             totalWidth,
@@ -471,48 +490,105 @@ class ShiftEndReportActivity : AppCompatActivity() {
         )
 
         val canvas = Canvas(bitmap)
-        canvas.drawColor(android.graphics.Color.WHITE)
 
-        val titlePaint = android.graphics.Paint().apply {
-            color = android.graphics.Color.BLACK
-            textSize = 28f
+        canvas.drawColor(Color.WHITE)
+
+        val titlePaint = Paint().apply {
+            color = Color.BLACK
+            textSize = 30f
             isFakeBoldText = true
+            isAntiAlias = true
         }
 
-        val textPaint = android.graphics.Paint().apply {
-            color = android.graphics.Color.BLACK
+        val textPaint = Paint().apply {
+            color = Color.BLACK
             textSize = 18f
+            isAntiAlias = true
         }
 
-        val headerPaint = android.graphics.Paint().apply {
-            color = android.graphics.Color.LTGRAY
-            style = android.graphics.Paint.Style.FILL
+        val headerTextPaint = Paint().apply {
+            color = Color.BLACK
+            textSize = 18f
+            isFakeBoldText = true
+            isAntiAlias = true
         }
 
-        val borderPaint = android.graphics.Paint().apply {
-            color = android.graphics.Color.BLACK
-            style = android.graphics.Paint.Style.STROKE
+        val headerPaint = Paint().apply {
+            color = Color.LTGRAY
+            style = Paint.Style.FILL
+        }
+
+        val borderPaint = Paint().apply {
+            color = Color.BLACK
+            style = Paint.Style.STROKE
             strokeWidth = 2f
         }
 
-        canvas.drawText("SHIFT END REPORT", startX, startY, titlePaint)
-        canvas.drawText("Date: $currentDate", startX, startY + 35f, textPaint)
-        canvas.drawText("Shift: $currentShift", startX, startY + 65f, textPaint)
+        // Title
+        canvas.drawText(
+            "SHIFT END REPORT",
+            startX,
+            startY,
+            titlePaint
+        )
 
-        var y = startY + 100f
+        canvas.drawText(
+            "Date: $currentDate",
+            startX,
+            startY + 40f,
+            textPaint
+        )
+
+        canvas.drawText(
+            "Shift: $currentShift",
+            startX,
+            startY + 75f,
+            textPaint
+        )
+
+        var y = startY + 120f
+
+        // Header Row
         var x = startX
 
         for (i in headers.indices) {
+
             val w = colWidths[i]
-            canvas.drawRect(x, y, x + w, y + rowHeight, headerPaint)
-            canvas.drawRect(x, y, x + w, y + rowHeight, borderPaint)
-            canvas.drawText(headers[i], x + 8f, y + 35f, textPaint)
+
+            canvas.drawRect(
+                x,
+                y,
+                x + w,
+                y + rowHeight,
+                headerPaint
+            )
+
+            canvas.drawRect(
+                x,
+                y,
+                x + w,
+                y + rowHeight,
+                borderPaint
+            )
+
+            drawMultilineText(
+                canvas = canvas,
+                text = headers[i],
+                paint = headerTextPaint,
+                x = x + 8f,
+                y = y + 28f,
+                maxWidth = w - 16f,
+                lineHeight = 22f
+            )
+
             x += w
         }
 
         y += rowHeight
 
+        // Data Rows
         entryList.forEachIndexed { index, row ->
+
             x = startX
 
             val rowData = listOf(
@@ -528,9 +604,27 @@ class ShiftEndReportActivity : AppCompatActivity() {
             )
 
             for (i in rowData.indices) {
+
                 val w = colWidths[i]
-                canvas.drawRect(x, y, x + w, y + rowHeight, borderPaint)
-                canvas.drawText(rowData[i].take(18), x + 8f, y + 35f, textPaint)
+
+                canvas.drawRect(
+                    x,
+                    y,
+                    x + w,
+                    y + rowHeight,
+                    borderPaint
+                )
+
+                drawMultilineText(
+                    canvas = canvas,
+                    text = rowData[i],
+                    paint = textPaint,
+                    x = x + 8f,
+                    y = y + 25f,
+                    maxWidth = w - 16f,
+                    lineHeight = 20f
+                )
+
                 x += w
             }
 
@@ -538,6 +632,113 @@ class ShiftEndReportActivity : AppCompatActivity() {
         }
 
         return bitmap
+    }
+    private fun drawMultilineText(
+        canvas: Canvas,
+        text: String,
+        paint: Paint,
+        x: Float,
+        y: Float,
+        maxWidth: Float,
+        lineHeight: Float
+    ) {
+
+        val words = text.split(" ")
+
+        var line = ""
+
+        var currentY = y
+
+        for (word in words) {
+
+            val testLine =
+                if (line.isEmpty()) word
+                else "$line $word"
+
+            if (paint.measureText(testLine) <= maxWidth) {
+
+                line = testLine
+
+            } else {
+
+                canvas.drawText(
+                    line,
+                    x,
+                    currentY,
+                    paint
+                )
+
+                line = word
+
+                currentY += lineHeight
+            }
+        }
+
+        if (line.isNotEmpty()) {
+
+            canvas.drawText(
+                line,
+                x,
+                currentY,
+                paint
+            )
+        }
+    }
+
+
+
+
+
+    private fun saveReportLog(message: String) {
+
+        val prefs = getSharedPreferences("ReportLogs", MODE_PRIVATE)
+
+        val oldLogs = prefs.getStringSet("logs", mutableSetOf())
+            ?.toMutableSet() ?: mutableSetOf()
+
+        val time = java.text.SimpleDateFormat(
+            "dd/MM hh:mm a",
+            java.util.Locale.getDefault()
+        ).format(java.util.Date())
+
+        oldLogs.add("$message|$time")
+
+        prefs.edit()
+            .putStringSet("logs", oldLogs)
+            .apply()
+    }
+
+    private fun addPremiumWatermark(original: Bitmap): Bitmap {
+
+        val result = original.copy(Bitmap.Config.ARGB_8888, true)
+        val canvas = Canvas(result)
+
+        val watermarkText = "REPORT GENERATED BY WORK EASY APP"
+
+        val marginRight = 25f
+        val marginBottom = 25f
+
+        val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = Color.GRAY
+            textSize = 24f
+            alpha = 150
+            textAlign = Paint.Align.RIGHT
+            typeface = Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD)
+        }
+
+        val x = result.width - marginRight
+
+        val y = result.height - marginBottom -
+                ((textPaint.descent() + textPaint.ascent()) / 2)
+
+        canvas.drawText(
+            watermarkText,
+            x,
+            y,
+            textPaint
+        )
+
+        return result
     }
 
 }

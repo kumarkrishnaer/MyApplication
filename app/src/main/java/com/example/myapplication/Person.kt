@@ -9,5 +9,7 @@ data class Person(
     val id: Int = 0,
     var name: String,
     var shift: String,
-    var isPresent: Boolean = false
+    var isPresent: Boolean = false,
+    var absentReason: String = "",
+    var isLive: Boolean = true
 )

@@ -6,7 +6,7 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/screen_bg">
+    android:background="@color/surface_bg">
 
     <!-- MAIN CONTENT -->
     <LinearLayout
@@ -27,7 +27,7 @@
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:layout_marginTop="20dp"
-            android:background="@color/surface_bg">
+            android:background="@color/screen_bg">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -39,28 +39,16 @@
             <ImageView
                 android:id="@+id/imgLogo"
                 android:layout_width="0dp"
-                android:layout_height="48dp"
+                android:layout_height="50dp"
                 android:layout_weight="1"
                 android:layout_marginStart="8dp"
-                android:src="@drawable/main_logo"
+                android:src="@drawable/work_easy_logo"
                 android:scaleType="fitStart"
                 android:adjustViewBounds="true" />
 
-        </LinearLayout>
-
-        <!-- GREETING CARD -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="6dp"
-            app:cardCornerRadius="18dp"
-            app:cardElevation="5dp"
-            android:backgroundTint="@color/surface_bg">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minHeight="48dp"
                 android:orientation="vertical"
@@ -69,7 +57,7 @@
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:background="@drawable/bg_purple_blue"
-                android:gravity="center_vertical">
+                android:gravity="right">
 
                 <TextView
                     android:id="@+id/tvGreeting"
@@ -84,7 +72,46 @@
 
             </LinearLayout>
 
-        </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <!-- GREETING CARD -->
+<!--        <androidx.cardview.widget.CardView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="10dp"-->
+<!--            android:layout_marginEnd="10dp"-->
+<!--            android:layout_marginBottom="6dp"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            app:cardCornerRadius="18dp"-->
+<!--            app:cardElevation="5dp"-->
+<!--            android:backgroundTint="@color/surface_bg">-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:minHeight="48dp"-->
+<!--                android:orientation="vertical"-->
+<!--                android:paddingStart="14dp"-->
+<!--                android:paddingEnd="14dp"-->
+<!--                android:paddingTop="10dp"-->
+<!--                android:paddingBottom="10dp"-->
+<!--                android:background="@drawable/bg_purple_blue"-->
+<!--                android:gravity="center_vertical">-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/tvGreeting"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Good Morning, Krishna"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:textColor="@color/text_primary"-->
+<!--                    android:maxLines="2"-->
+<!--                    android:ellipsize="end" />-->
+
+<!--            </LinearLayout>-->
+
+<!--        </androidx.cardview.widget.CardView>-->
 
         <!-- CONTENT -->
         <ScrollView
@@ -166,7 +193,7 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="175dp"
                             android:minHeight="96dp"
                             android:orientation="vertical"
                             android:background="@drawable/rounded"
@@ -177,8 +204,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Today's Status"
-                                android:textSize="13sp"
-                                android:textColor="@color/text_secondary"
+                                android:textSize="17sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_primary"
                                 android:maxLines="1"
                                 android:ellipsize="end" />
 
@@ -187,15 +215,79 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Not Updated"
-                                android:textColor="#FF3B30"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                android:maxLines="2"
+                                android:ellipsize="end" />
+
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Last Update"
                                 android:textSize="17sp"
                                 android:textStyle="bold"
+                                android:textColor="@color/text_primary"
+                                android:maxLines="1"
+                                android:ellipsize="end" />
+
+                            <TextView
+                                android:id="@+id/tvLastUpdate"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="No data"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_secondary"
                                 android:maxLines="2"
                                 android:ellipsize="end" />
 
                         </LinearLayout>
 
                     </com.google.android.material.card.MaterialCardView>
+
+<!--                    <com.google.android.material.card.MaterialCardView-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:minHeight="96dp"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:layout_margin="5dp"-->
+<!--                        app:cardCornerRadius="20dp"-->
+<!--                        app:cardElevation="5dp">-->
+
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="match_parent"-->
+<!--                            android:minHeight="96dp"-->
+<!--                            android:orientation="vertical"-->
+<!--                            android:background="@drawable/rounded"-->
+<!--                            android:padding="14dp"-->
+<!--                            android:gravity="center_vertical">-->
+
+<!--                            <TextView-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:text="Last Update"-->
+<!--                                android:textSize="13sp"-->
+<!--                                android:textColor="@color/text_secondary"-->
+<!--                                android:maxLines="1"-->
+<!--                                android:ellipsize="end" />-->
+
+<!--                            <TextView-->
+<!--                                android:id="@+id/tvLastUpdate"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:text="No data"-->
+<!--                                android:textSize="15sp"-->
+<!--                                android:textStyle="bold"-->
+<!--                                android:textColor="@color/text_primary"-->
+<!--                                android:maxLines="2"-->
+<!--                                android:ellipsize="end" />-->
+
+<!--                        </LinearLayout>-->
+
+<!--                    </com.google.android.material.card.MaterialCardView>-->
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0dp"
@@ -216,24 +308,23 @@
                             android:gravity="center_vertical">
 
                             <TextView
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Last Update"
-                                android:textSize="13sp"
-                                android:textColor="@color/text_secondary"
-                                android:maxLines="1"
-                                android:ellipsize="end" />
-
-                            <TextView
-                                android:id="@+id/tvLastUpdate"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="No data"
-                                android:textSize="15sp"
+                                android:text="Logs"
+                                android:layout_gravity="left"
                                 android:textStyle="bold"
+                                android:textSize="16sp"
                                 android:textColor="@color/text_primary"
-                                android:maxLines="2"
-                                android:ellipsize="end" />
+                                android:paddingStart="12dp"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="4dp"/>
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recyclerLog"
+                                android:layout_width="match_parent"
+                                android:layout_height="120dp"
+                                android:overScrollMode="never"
+                                android:scrollbars="vertical"/>
 
                         </LinearLayout>
 
@@ -394,13 +485,97 @@
                             <ImageView
                                 android:layout_width="60dp"
                                 android:layout_height="60dp"
-                                android:src="@drawable/ic_edit"
+                                android:src="@drawable/ic_shift_end_report"
                                 android:adjustViewBounds="true" />
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Shift End Reports"
+                                android:textStyle="bold"
+                                android:textSize="13sp"
+                                android:gravity="center"
+                                android:textColor="@color/text_primary"
+                                android:layout_marginTop="8dp"
+                                android:maxLines="2"
+                                android:ellipsize="end" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+<!--                    Traning report-->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/btnTraningDocs"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:minHeight="112dp"
+                        android:layout_margin="6dp"
+                        android:layout_columnWeight="1"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="4dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:minHeight="112dp"
+                            android:orientation="vertical"
+                            android:background="@drawable/rounded"
+                            android:gravity="center"
+                            android:padding="10dp">
+
+                            <ImageView
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:src="@drawable/ic_traningdocs"
+                                android:adjustViewBounds="true" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Traning Docs "
+                                android:textStyle="bold"
+                                android:textSize="13sp"
+                                android:gravity="center"
+                                android:textColor="@color/text_primary"
+                                android:layout_marginTop="8dp"
+                                android:maxLines="2"
+                                android:ellipsize="end" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+<!--                    Analysis report-->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/btnAnalysisReport"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:minHeight="112dp"
+                        android:layout_margin="6dp"
+                        android:layout_columnWeight="1"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="4dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:minHeight="112dp"
+                            android:orientation="vertical"
+                            android:background="@drawable/rounded"
+                            android:gravity="center"
+                            android:padding="10dp">
+
+                            <ImageView
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:src="@drawable/ic_analysis"
+                                android:adjustViewBounds="true" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Analysis Report "
                                 android:textStyle="bold"
                                 android:textSize="13sp"
                                 android:gravity="center"
@@ -438,9 +613,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="64dp"
+            app:itemIconSize="24dp"
             android:background="@color/bottom_nav_bg"
-            app:itemIconTint="#6A11CB"
-            app:itemTextColor="#6A11CB"
+            app:itemTextColor="@color/bottom_nav_color"
+            app:itemIconTint="@color/bottom_nav_color"
+
+            android:textColor="@color/text_primary"
             app:labelVisibilityMode="labeled"
             app:menu="@menu/bottom_menu" />
 

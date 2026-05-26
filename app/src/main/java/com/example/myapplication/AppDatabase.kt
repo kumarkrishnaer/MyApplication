@@ -1,13 +1,13 @@
 package com.example.myapplication
-
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [WorkData::class, User::class, Person::class ,ShiftEndReportData::class],
-    version = 3,
+    entities = [WorkData::class, User::class, Person::class ,ShiftEndReportData::class,
+        ReportAPDropdownItem::class, ReportAPEmployeeMaster::class],
+    version = 9,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -16,6 +16,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun personDao(): PersonDao
     abstract fun shiftEndReportDao(): ShiftEndReportDao
+    abstract fun reportAPDropdownDao(): ReportAPDropdownDao
+    abstract fun reportAPEmployeeMasterDao():ReportAPEmployeeMasterDao
 
 
     companion object {

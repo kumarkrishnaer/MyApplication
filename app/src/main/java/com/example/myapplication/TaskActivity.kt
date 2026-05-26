@@ -16,9 +16,10 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import androidx.appcompat.app.AlertDialog
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import android.text.TextWatcher
+import android.text.Editable
 
 
 
@@ -115,7 +116,7 @@ class TaskActivity : AppCompatActivity() {
             }
         }
 
-        // ================= HEADER USER LIST =================
+        // ========================== HEADER USER LIST =================
 
         val etNewHeader = findViewById<EditText>(R.id.etNewHeader)
         val btnAddHeader = findViewById<Button>(R.id.btnAddHeader)
@@ -199,27 +200,51 @@ class TaskActivity : AppCompatActivity() {
 
         btnShare.setOnClickListener {
 
-            if (list.isEmpty()) {
-                Toast.makeText(this, "No data to share", Toast.LENGTH_SHORT).show()
+            val liveList = list.filter { it.isLive }
+
+            if (liveList.isEmpty()) {
+                Toast.makeText(this, "No active data to share", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             val message = StringBuilder()
-
             val selectedHeader = dropdownHeader.text.toString().trim()
 
+//            message.append("```")
+//            message.append("\n============================\n")
+//
+//            if (selectedHeader.isNotEmpty()) {
+//                message.append("$selectedHeader\n")
+//            } else {
+//                message.append("ATTENDANCE LIST\n")
+//            }
+//
+//            message.append("============================\n")
+//            message.append("```\n\n")
 
-            message.append("━━━━━━━━━━━━━━━━━━━━\n")
             if (selectedHeader.isNotEmpty()) {
-                message.append("$selectedHeader\n")
-            }
-            else {
-                message.append(" ATTENDANCE \n")
-            }
-            message.append("━━━━━━━━━━━━━━━━━━━━\n")
 
+                val lines = selectedHeader
+                    .trim()
+                    .lines()
+                    .map { it.trim() }
+                    .filter { it.isNotEmpty() }
 
-//            message.append("*📋 Attendance List*\n\n")
+                if (lines.isNotEmpty()) {
+
+                    message.append("*${lines[0]}*\n\n")
+                }
+
+                for (i in 1 until lines.size) {
+                    message.append("${lines[i]}\n")
+                }
+
+                message.append("\n")
+
+            } else {
+                message.append("*ATTENDANCE LIST*\n\n")
+            }
+            message.append("\n")
             message.append("*Date:* ${tvDate.text}\n")
             message.append("*Shift:* ${tvShift.text}\n\n")
 
@@ -227,8 +252,8 @@ class TaskActivity : AppCompatActivity() {
 
             if (!hideName) {
 
-                val presentList = list.filter { it.isPresent }
-                val absentList = list.filter { !it.isPresent }
+                val presentList = liveList.filter { it.isPresent }
+                val absentList = liveList.filter { !it.isPresent }
 
                 var count = 1
 
@@ -241,16 +266,24 @@ class TaskActivity : AppCompatActivity() {
                 }
 
                 if (absentList.isNotEmpty()) {
+
                     message.append("*❌ Absent List*\n")
+
                     absentList.forEach {
+
                         message.append("${count++}. ${it.name}\n")
+
+                        if (it.absentReason.isNotEmpty()) {
+                            message.append("   └ Deputy: ${it.absentReason}\n")
+                        }
+
+                        message.append("\n")
                     }
-                    message.append("\n")
                 }
             }
 
-            val total = list.size
-            val present = list.count { it.isPresent }
+            val total = liveList.size
+            val present = liveList.count { it.isPresent }
             val absent = total - present
             val percent = if (total > 0) (present * 100) / total else 0
 
@@ -273,12 +306,59 @@ class TaskActivity : AppCompatActivity() {
 
             try {
                 startActivity(intent)
+                saveReportLog("Attendance Updated")
             } catch (e: Exception) {
                 Toast.makeText(this, "WhatsApp not installed", Toast.LENGTH_SHORT).show()
+
             }
         }
 
+//        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
+//
+//        setSupportActionBar(toolbar)
+//
+//        toolbar.setNavigationOnClickListener {
+//            onBackPressedDispatcher.onBackPressed()
+//        }
 
+        val remarkPrefs = getSharedPreferences("AttendanceRemarkPrefs", MODE_PRIVATE)
+
+        etRemark.setText(
+            remarkPrefs.getString("remark_text", "")
+        )
+
+        etRemark.addTextChangedListener(object : android.text.TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                remarkPrefs.edit()
+                    .putString("remark_text", s.toString())
+                    .apply()
+            }
+
+            override fun afterTextChanged(s: android.text.Editable?) {}
+        })
+
+
+    }
+
+    private fun saveReportLog(message: String) {
+
+        val prefs = getSharedPreferences("ReportLogs", MODE_PRIVATE)
+
+        val oldLogs = prefs.getStringSet("logs", mutableSetOf())
+            ?.toMutableSet() ?: mutableSetOf()
+
+        val time = java.text.SimpleDateFormat(
+            "dd/MM hh:mm a",
+            java.util.Locale.getDefault()
+        ).format(java.util.Date())
+
+        oldLogs.add("$message|$time")
+
+        prefs.edit()
+            .putStringSet("logs", oldLogs)
+            .apply()
     }
 
     private fun getShift(): String {
@@ -298,15 +378,24 @@ class TaskActivity : AppCompatActivity() {
         tvAbsent: TextView,
         tvPercentage: TextView
     ) {
-        val total = list.size
-        val present = list.count { it.isPresent }
+
+        val liveList = list.filter { it.isLive }
+
+        val total = liveList.size
+        val present = liveList.count { it.isPresent }
         val absent = total - present
 
         tvTotal.text = "Total: $total"
         tvPresent.text = "Present: $present"
         tvAbsent.text = "Absent: $absent"
 
-        val percent = if (total > 0) (present * 100) / total else 0
+        val percent = if (total > 0) {
+            (present * 100) / total
+        } else {
+            0
+        }
+
         tvPercentage.text = "Present: $percent%"
     }
+
 }

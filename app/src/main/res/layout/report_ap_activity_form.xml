@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mainScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:clipToPadding="false"
+    android:paddingBottom="320dp"
+    android:background="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="320dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnManageDropdown"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
+            android:text="ADD / MANAGE"
+            android:textSize="11sp"
+            android:layout_gravity="end"
+            android:textColor="#FFFFFF"
+            app:backgroundTint="@null"
+            android:background="@drawable/bg_shift_end_report_btn" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SHIFT END REPORT"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:textColor="#2196F3"
+            android:gravity="center"
+            android:padding="12dp"/>
+
+        <!-- DATE -->
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Date"
+            app:boxBackgroundColor="@color/input_bg"
+            app:boxStrokeColor="#2196F3"
+            app:boxStrokeWidth="2dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp"
+                android:focusable="false"
+                android:clickable="true"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- NAME -->
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Name"
+            app:boxBackgroundColor="@color/input_bg"
+            app:boxStrokeColor="#2196F3"
+            app:boxStrokeWidth="2dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp">
+
+            <AutoCompleteTextView
+                android:id="@+id/dropdownName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- ID -->
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Id No"
+            app:boxBackgroundColor="@color/input_bg"
+            app:boxStrokeColor="#2196F3"
+            app:boxStrokeWidth="2dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp">
+
+            <AutoCompleteTextView
+                android:id="@+id/etIdNo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- FLOOR -->
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Floor"
+            app:boxBackgroundColor="@color/input_bg"
+            app:boxStrokeColor="#2196F3"
+            app:boxStrokeWidth="2dp">
+
+            <AutoCompleteTextView
+                android:id="@+id/dropdownFloor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- STATION -->
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Station"
+            app:boxBackgroundColor="@color/input_bg"
+            app:boxStrokeColor="#2196F3"
+            app:boxStrokeWidth="2dp">
+
+            <AutoCompleteTextView
+                android:id="@+id/dropdownStation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- STATION ID -->
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Station ID"
+            app:boxBackgroundColor="@color/input_bg"
+            app:boxStrokeColor="#2196F3"
+            app:boxStrokeWidth="2dp">
+
+            <AutoCompleteTextView
+                android:id="@+id/etStationId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- ISSUE -->
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Issue"
+            app:boxBackgroundColor="@color/input_bg"
+            app:boxStrokeColor="#2196F3"
+            app:boxStrokeWidth="2dp">
+
+            <AutoCompleteTextView
+                android:id="@+id/dropdownIssue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp"
+                android:inputType="textMultiLine"
+                android:gravity="top|start"
+                android:maxLines="4"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- CORRECTIVE -->
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Corrective"
+            app:boxBackgroundColor="@color/input_bg"
+            app:boxStrokeColor="#2196F3"
+            app:boxStrokeWidth="2dp">
+
+            <AutoCompleteTextView
+                android:id="@+id/etCorrective"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp"
+                android:inputType="textMultiLine"
+                android:gravity="top|start"
+                android:maxLines="4"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- STATUS -->
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Status"
+            app:boxBackgroundColor="@color/input_bg"
+            app:boxStrokeColor="#2196F3"
+            app:boxStrokeWidth="2dp">
+
+            <AutoCompleteTextView
+                android:id="@+id/dropdownStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- REMARK -->
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Remark"
+            app:boxBackgroundColor="@color/input_bg"
+            app:boxStrokeColor="#2196F3"
+            app:boxStrokeWidth="2dp">
+
+            <AutoCompleteTextView
+                android:id="@+id/etRemark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp"
+                android:inputType="textMultiLine"
+                android:gravity="top|start"
+                android:maxLines="4"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:id="@+id/formContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAddAnotherForm"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="ADD FORM"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="12dp"
+            app:backgroundTint="@null"
+            android:background="@drawable/bg_shift_end_report_btn" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSave"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="GEN REPORT"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            app:backgroundTint="@null"
+            android:background="@drawable/bg_shift_end_report_btn" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
