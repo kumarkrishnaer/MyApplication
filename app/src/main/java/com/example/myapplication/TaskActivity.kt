@@ -239,7 +239,7 @@ class TaskActivity : AppCompatActivity() {
                     message.append("${lines[i]}\n")
                 }
 
-                message.append("\n")
+//                message.append("\n")
 
             } else {
                 message.append("*ATTENDANCE LIST*\n\n")
@@ -313,13 +313,7 @@ class TaskActivity : AppCompatActivity() {
             }
         }
 
-//        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
-//
-//        setSupportActionBar(toolbar)
-//
-//        toolbar.setNavigationOnClickListener {
-//            onBackPressedDispatcher.onBackPressed()
-//        }
+
 
         val remarkPrefs = getSharedPreferences("AttendanceRemarkPrefs", MODE_PRIVATE)
 

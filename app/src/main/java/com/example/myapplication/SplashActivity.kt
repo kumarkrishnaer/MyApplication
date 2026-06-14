@@ -8,8 +8,6 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.DecelerateInterpolator
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 class SplashActivity : AppCompatActivity() {
@@ -18,84 +16,57 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        val tvTitle = findViewById<TextView>(R.id.tvTitle)
-        val tvSub = findViewById<TextView>(R.id.tvTyping)
-        val orangeLine = findViewById<View>(R.id.orangeLine)
-        val blueGlow = findViewById<View>(R.id.blueGlow)
+        val logo = findViewById<View>(R.id.imgSplashLogo)
+        val glow = findViewById<View>(R.id.blueGlow)
 
-        tvTitle.alpha = 0f
-        tvTitle.scaleX = 0.35f
-        tvTitle.scaleY = 0.35f
+        logo.alpha = 0f
+        logo.scaleX = 0.25f
+        logo.scaleY = 0.25f
 
-        tvSub.alpha = 0f
-        tvSub.translationY = 35f
+        glow.alpha = 0f
+        glow.scaleX = 0.4f
+        glow.scaleY = 0.4f
 
-        orangeLine.scaleX = 0f
-        orangeLine.pivotX = 0f
-
-        blueGlow.alpha = 0f
-        blueGlow.scaleX = 0.2f
-        blueGlow.scaleY = 0.2f
-
-        val glowAnim = AnimatorSet().apply {
+        val logoIntro = AnimatorSet().apply {
             playTogether(
-                ObjectAnimator.ofFloat(blueGlow, "alpha", 0f, 0.20f, 0f),
-                ObjectAnimator.ofFloat(blueGlow, "scaleX", 0.2f, 4.5f),
-                ObjectAnimator.ofFloat(blueGlow, "scaleY", 0.2f, 4.5f)
+                ObjectAnimator.ofFloat(logo, View.ALPHA, 0f, 1f),
+                ObjectAnimator.ofFloat(logo, View.SCALE_X, 0.25f, 1.18f, 1f),
+                ObjectAnimator.ofFloat(logo, View.SCALE_Y, 0.25f, 1.18f, 1f)
             )
-            duration = 1200
+            duration = 1600
             interpolator = AccelerateDecelerateInterpolator()
         }
 
-        val titleZoom = AnimatorSet().apply {
+        val glowIntro = AnimatorSet().apply {
             playTogether(
-                ObjectAnimator.ofFloat(tvTitle, "alpha", 0f, 1f),
-                ObjectAnimator.ofFloat(tvTitle, "scaleX", 0.35f, 1.15f, 1f),
-                ObjectAnimator.ofFloat(tvTitle, "scaleY", 0.35f, 1.15f, 1f)
+                ObjectAnimator.ofFloat(glow, View.ALPHA, 0f, 0.85f, 0.35f),
+                ObjectAnimator.ofFloat(glow, View.SCALE_X, 0.4f, 2.4f),
+                ObjectAnimator.ofFloat(glow, View.SCALE_Y, 0.4f, 2.4f)
             )
-            duration = 1300
-            startDelay = 250
+            duration = 1800
             interpolator = AccelerateDecelerateInterpolator()
         }
 
-        val lineSweep = ObjectAnimator.ofFloat(orangeLine, "scaleX", 0f, 1f).apply {
-            duration = 700
-            startDelay = 1100
-            interpolator = DecelerateInterpolator()
-        }
-
-        val subFade = AnimatorSet().apply {
+        val exitAnim = AnimatorSet().apply {
             playTogether(
-                ObjectAnimator.ofFloat(tvSub, "alpha", 0f, 1f),
-                ObjectAnimator.ofFloat(tvSub, "translationY", 35f, 0f)
+                ObjectAnimator.ofFloat(logo, View.ALPHA, 1f, 0f),
+                ObjectAnimator.ofFloat(logo, View.SCALE_X, 1f, 1.45f),
+                ObjectAnimator.ofFloat(logo, View.SCALE_Y, 1f, 1.45f),
+                ObjectAnimator.ofFloat(glow, View.ALPHA, 0.35f, 0f)
             )
-            duration = 700
-            startDelay = 1500
-            interpolator = DecelerateInterpolator()
-        }
-
-        val exitZoom = AnimatorSet().apply {
-            playTogether(
-                ObjectAnimator.ofFloat(tvTitle, "scaleX", 1f, 1.6f),
-                ObjectAnimator.ofFloat(tvTitle, "scaleY", 1f, 1.6f),
-                ObjectAnimator.ofFloat(tvTitle, "alpha", 1f, 0f),
-                ObjectAnimator.ofFloat(tvSub, "alpha", 1f, 0f),
-                ObjectAnimator.ofFloat(orangeLine, "alpha", 1f, 0f)
-            )
-            duration = 700
-            startDelay = 2700
+            duration = 650
+            startDelay = 2200
             interpolator = AccelerateDecelerateInterpolator()
         }
 
-        glowAnim.start()
-        titleZoom.start()
-        lineSweep.start()
-        subFade.start()
-        exitZoom.start()
+        logoIntro.start()
+        glowIntro.start()
+        exitAnim.start()
 
         Handler(Looper.getMainLooper()).postDelayed({
             startActivity(Intent(this, LoginActivity::class.java))
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
-        }, 3600)
+        }, 3000)
     }
 }

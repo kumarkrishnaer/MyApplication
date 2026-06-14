@@ -4,10 +4,12 @@
     <color name="screen_bg">#161B22</color>
 
     <color name="surface_bg">#1E293B</color>
+    <color name="surface_bg_runningtexy">#1E293B</color>
 
     <color name="text_primary">#FFFFFF</color>
-
     <color name="text_secondary">#CBD5E1</color>
+    <color name="text_third">#FFFFFF</color>
+    <color name="running_text">#FFFFFF</color>
 
     <color name="bottom_nav_bg">#0B1120</color>
 

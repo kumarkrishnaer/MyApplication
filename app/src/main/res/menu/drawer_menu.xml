@@ -6,10 +6,10 @@
         android:icon="@drawable/ic_home"
         android:title="Home"/>
 
-<!--    <item-->
-<!--        android:id="@+id/nav_theme"-->
-<!--        android:icon="@drawable/ic_theme"-->
-<!--        android:title="Theme" />-->
+    <item
+        android:id="@+id/nav_License"
+        android:icon="@drawable/ic_license"
+        android:title="License" />
 
     <item
         android:id="@+id/nav_history"

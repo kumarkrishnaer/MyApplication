@@ -1,37 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/mainScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
+    android:clipToPadding="false"
+    android:paddingBottom="260dp"
+    android:fitsSystemWindows="true"
     android:overScrollMode="always"
+    android:scrollbars="none"
     android:background="@color/screen_bg">
 
-
-
-
-
-
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="14dp"
+        android:paddingBottom="280dp"
         android:background="@color/surface_bg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-<!--        <com.google.android.material.appbar.MaterialToolbar-->
-<!--            android:id="@+id/toolbar"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="80dp"-->
-<!--            android:background="#FFFFFF"-->
-<!--            app:titleTextColor="@android:color/white"-->
-<!--            app:navigationIcon="@drawable/ic_back">-->
-
-
-<!--        </com.google.android.material.appbar.MaterialToolbar>-->
-
-
+        android:descendantFocusability="beforeDescendants"
+        android:animateLayoutChanges="true">
 
         <!-- HEADER LOGO + DATE SHIFT -->
         <LinearLayout
@@ -40,10 +31,6 @@
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:padding="6dp">
-
-
-
-
 
             <ImageView
                 android:id="@+id/imgLogo"
@@ -116,12 +103,12 @@
 
         <!-- HEADER DROPDOWN -->
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:boxStrokeWidth="2dp"
             android:layout_marginBottom="6dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:hint="Select Attendance Header">
+            android:hint="Select Attendance Header"
+            app:boxStrokeWidth="2dp">
 
             <AutoCompleteTextView
                 android:id="@+id/dropdownHeader"
@@ -198,7 +185,7 @@
             android:padding="8dp"
             android:layout_marginBottom="8dp"
             android:layout_width="match_parent"
-            android:layout_height="60dp">
+            android:layout_height="90dp">
 
             <EditText
                 android:id="@+id/etRemark"
@@ -207,6 +194,10 @@
                 android:padding="6dp"
                 android:textColor="@color/text_primary"
                 android:textColorHint="#9CA3AF"
+                android:gravity="top|start"
+                android:inputType="textMultiLine"
+                android:maxLines="4"
+                android:scrollHorizontally="false"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>
@@ -263,16 +254,15 @@
         </LinearLayout>
 
         <!-- PRESENT / ABSENT LIST -->
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:nestedScrollingEnabled="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:overScrollMode="never"
-            android:layout_marginBottom="8dp" />
-
-
+            android:layout_marginBottom="12dp" />
 
         <!-- SHARE BUTTON -->
         <com.google.android.material.card.MaterialCardView

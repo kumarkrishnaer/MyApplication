@@ -156,7 +156,7 @@
 
                     <!-- station id -->
                     <TextView
-                        android:text="Machine :-"
+                        android:text="Machine Name/Station Id :-"
                         android:textSize="22sp"
                         android:textColor="@color/text_primary"
                         android:layout_marginBottom="6dp"
@@ -173,7 +173,7 @@
                         android:paddingStart="12dp"
                         android:textColor="#000000"
                         android:textColorHint="#9E9E9E"
-                        android:hint="Enter Machine Name"
+                        android:hint="Enter Machine Name | Station Id"
                         android:inputType="text"
                         android:maxLines="1"
                         android:imeOptions="actionNext"/>
@@ -195,8 +195,9 @@
                         android:id="@+id/reportLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColorHint="#9E9E9E"
+                        app:boxBackgroundColor="@color/input_bg"
                         android:hint="Select Shift"
+
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 
                         <AutoCompleteTextView
@@ -546,15 +547,15 @@
                                 android:textColor="@color/text_primary"
                                 android:layout_width="match_parent"
                                 android:background="@drawable/bg_input_field"
-                                android:layout_height="wrap_content"
-                                android:inputType="none"/>
+                                android:layout_height="wrap_content" />
 
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <!-- Machine name -->
 
+
                         <TextView
-                            android:text="Machine Name/Station ID:-"
+                            android:text="Machine Name:-"
                             android:textStyle="bold"
                             android:textSize="22sp"
                             android:textColor="@color/text_primary"
@@ -563,18 +564,20 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
 
-                        <EditText
-                            android:id="@+id/etMachine"
+
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:background="@drawable/bg_input_field"
-                            android:paddingStart="12dp"
-                            android:textColor="#000000"
-                            android:textColorHint="#9E9E9E"
-                            android:hint="Enter Your M/C Name"
-                            android:inputType="text"
-                            android:maxLines="1"
-                            android:imeOptions="actionNext"/>
+                            android:layout_height="wrap_content"
+                            android:hint="Select Machine"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+                            <AutoCompleteTextView
+                                android:id="@+id/etMachine"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/bg_input_field" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
 
 
                         <!-- issue description -->

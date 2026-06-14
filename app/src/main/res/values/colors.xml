@@ -5,9 +5,12 @@
 
     <color name="screen_bg">#FFFFFF</color>
     <color name="surface_bg">#F8FAFC</color>
+    <color name="surface_bg_runningtexy">#F5F5F5</color>
 
     <color name="text_primary">#111827</color>
     <color name="text_secondary">#6B7280</color>
+    <color name="text_third">#A9A9A9</color>
+    <color name="running_text">#D32F2F</color>
 
     <color name="bottom_nav_bg">#FFFFFF</color>
     <color name="bottom_nav_item">#6A11CB</color>

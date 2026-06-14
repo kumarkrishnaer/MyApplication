@@ -166,28 +166,75 @@ class UpdateActivity : AppCompatActivity() {
 
 
 //        ============================= machine vendor ============================
-        val etVendor =  findViewById<AutoCompleteTextView>(R.id.etVendor)
+//        val etVendor =  findViewById<AutoCompleteTextView>(R.id.etVendor)
+//
+//
+//        val machinevendorby = listOf(
+//            "JLK",
+//            "ACCURATE",
+//            "AVERNA",
+//            "SFO",
+//            "VVDN",
+//            "AMPHENOL",
+//            "NORDSON",
+//
+//
+//            )
+//
+//        val adaptervendor = ArrayAdapter(
+//            this,
+//            android.R.layout.simple_list_item_1,
+//            machinevendorby
+//        )
+//
+//        etVendor.setAdapter(adaptervendor)
 
+        //===================================================================
 
-        val machinevendorby = listOf(
-            "JLK",
-            "ACCURATE",
-            "AVERNA",
-            "SFO",
-            "VVDN",
-            "AMPHENOL",
-            "NORDSON",
+        val etVendor = findViewById<AutoCompleteTextView>(R.id.etVendor)
+        val etMachine = findViewById<AutoCompleteTextView>(R.id.etMachine)
 
+        val vendorList = listOf("JLK", "ACCURATE", "AVERNA","SFO","VVDN","AMPHENOL","NORDSON")
 
-            )
-
-        val adaptervendor = ArrayAdapter(
+        val vendorAdapter = ArrayAdapter(
             this,
-            android.R.layout.simple_list_item_1,
-            machinevendorby
+            android.R.layout.simple_dropdown_item_1line,
+            vendorList
         )
 
-        etVendor.setAdapter(adaptervendor)
+        etVendor.setAdapter(vendorAdapter)
+
+        val machineMap = mapOf(
+            "JLK" to listOf("FACT", "ALS-P", "ALS-X-TALK","BARBIE","WISTERIA","VENT"),
+            "ACCURATE" to listOf("SYSTEM CAL", "CSC", "TRITUM BUTTON FLEX","CYCLONE"),
+            "AVERNA" to listOf("STOM", "MIYAGI"),
+            "SFO" to listOf("CYCLONE", "R-CAM ALPHA", "JASMINE","DVI"),
+            "VVDN" to listOf("ISD", "SOTA"),
+            "AMPHENOL" to listOf("IRONMAN LOKI"),
+            "NORDSON" to listOf("AXI")
+        )
+
+        etVendor.setOnItemClickListener { _, _, position, _ ->
+
+            val selectedVendor = vendorList[position]
+
+            val machineList = machineMap[selectedVendor] ?: emptyList()
+
+            val machineAdapter = ArrayAdapter(
+                this,
+                android.R.layout.simple_dropdown_item_1line,
+                machineList
+            )
+
+            etMachine.setAdapter(machineAdapter)
+
+            // Clear previous selection
+            etMachine.setText("", false)
+        }
+
+
+
+
 
 
         // ===================== vendor skill level ==========================
@@ -244,7 +291,7 @@ class UpdateActivity : AppCompatActivity() {
         val etStationId = findViewById<EditText>(R.id.etStationId)
         val etLine = findViewById<EditText>(R.id.etLine)
         val etDescription = findViewById<EditText>(R.id.etDescription)
-        val etMachine = findViewById<EditText>(R.id.etMachine)
+//        val etMachine = findViewById<EditText>(R.id.etMachine)
         val etAnalysis = findViewById<EditText>(R.id.etAnalysis)
         val etRootCause = findViewById<EditText>(R.id.etRootCause)
         val etCorrective = findViewById<EditText>(R.id.etCorrective)
@@ -509,7 +556,7 @@ class UpdateActivity : AppCompatActivity() {
                             setCell(
                                 table.rows[2].cells[4],
 
-                                        etStationId.text.toString(),
+                                etStationId.text.toString(),
                                 20.0
                             )
 
@@ -524,7 +571,7 @@ class UpdateActivity : AppCompatActivity() {
                             setCell(
                                 table.rows[3].cells[2],
 
-                                        etIssueendtime.text.toString(),
+                                etIssueendtime.text.toString(),
                                 20.0
                             )
 
@@ -669,7 +716,7 @@ class UpdateActivity : AppCompatActivity() {
 
 
 
-//==================================================================================================
+    //==================================================================================================
     private fun collectData(): WorkData {
 
         val downtimeGroup = findViewById<RadioGroup>(R.id.radioDowntime)
@@ -712,7 +759,7 @@ class UpdateActivity : AppCompatActivity() {
 
 
 
-        )
+            )
     }
 
     private fun createReportMessage(): String {
@@ -991,7 +1038,7 @@ class UpdateActivity : AppCompatActivity() {
 
     // ================= SEND TO GOOGLE SHEET =================
 
-//    private fun sendDataToSheet(data: WorkData) {
+    //    private fun sendDataToSheet(data: WorkData) {
 //
 //        val json = JSONObject().apply {
 //            put("date", data.date)
@@ -1059,101 +1106,101 @@ class UpdateActivity : AppCompatActivity() {
 //            }
 //        })
 //    }
-private fun sendDataToSheet(data: WorkData) {
+    private fun sendDataToSheet(data: WorkData) {
 
-    // ✅ Get Training Yes/No dynamically
-    val radioTraining = findViewById<RadioGroup>(R.id.radioTraining)
-    val selectedId = radioTraining.checkedRadioButtonId
+        // ✅ Get Training Yes/No dynamically
+        val radioTraining = findViewById<RadioGroup>(R.id.radioTraining)
+        val selectedId = radioTraining.checkedRadioButtonId
 
-    val trainingValue = if (selectedId != -1) {
-        findViewById<RadioButton>(selectedId).text.toString()
-    } else {
-        "No"
-    }
-
-    // ✅ Get training fields
-    val etNoReason = findViewById<EditText>(R.id.etNoReason)
-    val etTrainingType = findViewById<AutoCompleteTextView>(R.id.etTrainingType)
-    val etTrainerName = findViewById<EditText>(R.id.etTrainerName)
-    val dropdownSkilllevel = findViewById<AutoCompleteTextView>(R.id.dropdownSkilllevel)
-    val etTrainingStation = findViewById<EditText>(R.id.etTrainingStation)
-    val etTraningCovered = findViewById<EditText>(R.id.etTraningCovered)
-    val etTraningRemarks = findViewById<EditText>(R.id.etTraningRemarks)
-
-    val json = JSONObject().apply {
-
-        // ===== Existing fields =====
-        put("date", data.date)
-        put("name", data.name)
-        put("id", data.empId)
-        put("stationId", data.stationId)
-        put("Shift", data.shift)
-        put("Team", data.team)
-        put("Line", data.line)
-        put("Downtime", data.downtime)
-        put("Vendor", data.vendor)
-        put("Description", data.description)
-        put("machine", data.machine)
-        put("Analysis", data.analysis)
-        put("RootCause", data.rootCause)
-        put("Corrective", data.corrective)
-        put("PreventiveAction", data.preventiveAction)
-        put("Issuestarttime", data.startTime)
-        put("Issueendtime", data.endTime)
-        put("TotalDowntime", data.totalTime)
-        put("IssuehandledBy", data.handledBy)
-        put("Sparechanged", data.spareChanged)
-        put("VendorSkillLevel", data.skillLevel)
-        put("WorkStatus", data.issueStatus)
-
-        // ===== Training fields =====
-        put("TrainingReport", trainingValue)
-
-        if (trainingValue == "No") {
-            put("TrainingNoReason", etNoReason.text.toString().trim())
+        val trainingValue = if (selectedId != -1) {
+            findViewById<RadioButton>(selectedId).text.toString()
         } else {
-            put("TrainingType", etTrainingType.text.toString().trim())
-            put("TrainerName", etTrainerName.text.toString().trim())
-            put("TrainerSkillLevel", dropdownSkilllevel.text.toString().trim())
-            put("TrainingStation", etTrainingStation.text.toString().trim())
-            put("TrainingCovered", etTraningCovered.text.toString().trim())
-            put("TrainingRemarks", etTraningRemarks.text.toString().trim())
+            "No"
         }
+
+        // ✅ Get training fields
+        val etNoReason = findViewById<EditText>(R.id.etNoReason)
+        val etTrainingType = findViewById<AutoCompleteTextView>(R.id.etTrainingType)
+        val etTrainerName = findViewById<EditText>(R.id.etTrainerName)
+        val dropdownSkilllevel = findViewById<AutoCompleteTextView>(R.id.dropdownSkilllevel)
+        val etTrainingStation = findViewById<EditText>(R.id.etTrainingStation)
+        val etTraningCovered = findViewById<EditText>(R.id.etTraningCovered)
+        val etTraningRemarks = findViewById<EditText>(R.id.etTraningRemarks)
+
+        val json = JSONObject().apply {
+
+            // ===== Existing fields =====
+            put("date", data.date)
+            put("name", data.name)
+            put("id", data.empId)
+            put("stationId", data.stationId)
+            put("Shift", data.shift)
+            put("Team", data.team)
+            put("Line", data.line)
+            put("Downtime", data.downtime)
+            put("Vendor", data.vendor)
+            put("Description", data.description)
+            put("machine", data.machine)
+            put("Analysis", data.analysis)
+            put("RootCause", data.rootCause)
+            put("Corrective", data.corrective)
+            put("PreventiveAction", data.preventiveAction)
+            put("Issuestarttime", data.startTime)
+            put("Issueendtime", data.endTime)
+            put("TotalDowntime", data.totalTime)
+            put("IssuehandledBy", data.handledBy)
+            put("Sparechanged", data.spareChanged)
+            put("VendorSkillLevel", data.skillLevel)
+            put("WorkStatus", data.issueStatus)
+
+            // ===== Training fields =====
+            put("TrainingReport", trainingValue)
+
+            if (trainingValue == "No") {
+                put("TrainingNoReason", etNoReason.text.toString().trim())
+            } else {
+                put("TrainingType", etTrainingType.text.toString().trim())
+                put("TrainerName", etTrainerName.text.toString().trim())
+                put("TrainerSkillLevel", dropdownSkilllevel.text.toString().trim())
+                put("TrainingStation", etTrainingStation.text.toString().trim())
+                put("TrainingCovered", etTraningCovered.text.toString().trim())
+                put("TrainingRemarks", etTraningRemarks.text.toString().trim())
+            }
+        }
+
+        val body = json.toString()
+            .toRequestBody("application/json".toMediaType())
+
+        val request = Request.Builder()
+            .url("https://script.google.com/macros/s/AKfycby_mvyDwFMcowxT-hl7sZLnkygKgm139DQmsS5pEK_eHwDQbLuZAYY5X6aW98fV7wbp/exec")
+            .post(body)
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+
+            override fun onFailure(call: Call, e: IOException) {
+                runOnUiThread {
+                    Toast.makeText(
+                        this@UpdateActivity,
+                        "Network Error ❌",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                runOnUiThread {
+                    Toast.makeText(
+                        this@UpdateActivity,
+                        if (response.isSuccessful)
+                            "Uploaded to Google Sheet ✅"
+                        else "Server Error ❌",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                response.close()
+            }
+        })
     }
-
-    val body = json.toString()
-        .toRequestBody("application/json".toMediaType())
-
-    val request = Request.Builder()
-        .url("https://script.google.com/macros/s/AKfycby_mvyDwFMcowxT-hl7sZLnkygKgm139DQmsS5pEK_eHwDQbLuZAYY5X6aW98fV7wbp/exec")
-        .post(body)
-        .build()
-
-    client.newCall(request).enqueue(object : Callback {
-
-        override fun onFailure(call: Call, e: IOException) {
-            runOnUiThread {
-                Toast.makeText(
-                    this@UpdateActivity,
-                    "Network Error ❌",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-
-        override fun onResponse(call: Call, response: Response) {
-            runOnUiThread {
-                Toast.makeText(
-                    this@UpdateActivity,
-                    if (response.isSuccessful)
-                        "Uploaded to Google Sheet ✅"
-                    else "Server Error ❌",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-            response.close()
-        }
-    })
-}
 
 }

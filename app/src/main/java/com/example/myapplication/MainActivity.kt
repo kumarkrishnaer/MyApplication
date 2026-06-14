@@ -5,9 +5,9 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.DocumentsContract
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -21,8 +21,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.messaging.FirebaseMessaging
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -30,23 +28,55 @@ import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import android.widget.Switch
 import androidx.appcompat.app.AppCompatDelegate
-import java.text.SimpleDateFormat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import android.provider.Settings
+import android.util.Log
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import androidx.viewpager2.widget.ViewPager2
+import okhttp3.*
+import org.json.JSONArray
+import java.io.IOException
+import android.os.Handler
+import android.os.Looper
+import org.json.JSONObject
+
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var tvTodayStatus: TextView
     private lateinit var tvLastUpdate: TextView
-    private lateinit var tvGreeting: TextView
-    private lateinit var tvLatestTitle: TextView
-    private lateinit var tvLatestMessage: TextView
-
     private lateinit var imgProfile: ImageView
     private lateinit var recyclerLog: RecyclerView
 
     private lateinit var db: AppDatabase
-    private val firestore = FirebaseFirestore.getInstance()
+
+
+    private val licenseUrl = "https://script.google.com/macros/s/AKfycby_mvyDwFMcowxT-hl7sZLnkygKgm139DQmsS5pEK_eHwDQbLuZAYY5X6aW98fV7wbp/exec"
+    private val bannerUrl = "https://script.google.com/macros/s/AKfycby_mvyDwFMcowxT-hl7sZLnkygKgm139DQmsS5pEK_eHwDQbLuZAYY5X6aW98fV7wbp/exec?action=banners"
+
+    private val noticeUrl = "https://script.google.com/macros/s/AKfycby_mvyDwFMcowxT-hl7sZLnkygKgm139DQmsS5pEK_eHwDQbLuZAYY5X6aW98fV7wbp/exec?action=notice"
+
+    private val sliderHandler = Handler(Looper.getMainLooper())
+
+    private val sliderRunnable = object : Runnable {
+        override fun run() {
+
+            val bannerViewPager =
+                findViewById<ViewPager2>(R.id.bannerViewPager)
+
+            bannerViewPager.currentItem =
+                bannerViewPager.currentItem + 1
+
+            sliderHandler.postDelayed(this, 3000)
+        }
+    }
 
 
 
@@ -70,47 +100,46 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
+        db = AppDatabase.getDatabase(applicationContext)
         UpdateChecker.checkForUpdate(this)
 
         // ================= Views =================
 
         tvTodayStatus = findViewById(R.id.tvTodayStatus)
         tvLastUpdate = findViewById(R.id.tvLastUpdate)
-        tvGreeting = findViewById(R.id.tvGreeting)
-        tvLatestTitle = findViewById(R.id.tvLatestTitle)
-        tvLatestMessage = findViewById(R.id.tvLatestMessage)
-
         recyclerLog = findViewById(R.id.recyclerLog)
 
+        val tvRunningText = findViewById<TextView>(R.id.tvRunningText)
+        tvRunningText.isSelected = true
+
+        loadRunningText()
         loadLogs()
-
-        db = AppDatabase.getDatabase(applicationContext)
-
+        loadBanners()
         loadStatus()
-        loadUserName()
-        loadLatestUpdate()
+//        loadUserName()
+        checkAppLicense()
 
-        // ================= Firebase =================
-        FirebaseMessaging.getInstance().subscribeToTopic("all")
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    Log.d("FCM", "Subscribed to topic ALL")
-                } else {
-                    Log.e("FCM", "Subscription failed")
-                }
-            }
 
-        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                Log.d("FCM_TOKEN", task.result ?: "null")
-            }
-        }
+
+
 
         // ================= Toolbar =================
+
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-//        supportActionBar?.title = ""
+
+
+
+
+        //======================  notification ==========================
+
+        val btnNotification = findViewById<ImageButton>(R.id.btnNotification)
+
+        btnNotification.setOnClickListener {
+            showNotificationDialog()
+        }
+
+
 
 
 
@@ -129,18 +158,26 @@ class MainActivity : AppCompatActivity() {
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        // Drawer menu clicks
+        //================   Drawer menu clicks  ===========================
+
         navMenu.setNavigationItemSelectedListener { item ->
 
             when (item.itemId) {
 
                 R.id.nav_home -> {
                     // already on home
+
                 }
+
+                    R.id.nav_License -> {
+                        showLicenseDialog()
+
+                    }
+
 
                 R.id.nav_history -> {
                     startActivity(Intent(this, HistoryActivity::class.java))
-                    true
+
 
                 }
 
@@ -173,7 +210,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_update -> {
                     Toast.makeText(this, "Checking for update...", Toast.LENGTH_SHORT).show()
                     UpdateChecker.checkForUpdate(this, true)
-                    true
+
 
                 }
             }
@@ -303,6 +340,9 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+        //================================= HEADER ===============================
+
+
 
         if (navMenu.headerCount > 0) {
 
@@ -313,17 +353,11 @@ class MainActivity : AppCompatActivity() {
 
             val tvUserName = headerView.findViewById<TextView>(R.id.tvUserName)
 
-//            lifecycleScope.launch {
-//                val lastEntry = db.workDao().getLastEntry()
-//
-//                runOnUiThread {
-//                    if (lastEntry != null) {
-//                        tvUserName.text = lastEntry.name
-//                    } else {
-//                        tvUserName.text = "User"
-//                    }
-//                }
-//            }
+
+
+
+
+
             val sharedPref = getSharedPreferences("LoginPrefs", MODE_PRIVATE)
 
             val username = sharedPref.getString("username", "User")
@@ -407,35 +441,11 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         loadStatus()
-        loadUserName()
+//        loadUserName()
         loadLogs()
     }
 
-    private fun loadLatestUpdate() {
-        firestore.collection("latest_updates")
-            .orderBy("time", com.google.firebase.firestore.Query.Direction.DESCENDING)
-            .limit(1)
-            .addSnapshotListener { snapshots, error ->
 
-                if (error != null) {
-                    tvLatestTitle.text = "Latest Update"
-                    tvLatestMessage.text = "Failed to load"
-                    return@addSnapshotListener
-                }
-
-                if (snapshots != null && !snapshots.isEmpty) {
-                    val document = snapshots.documents[0]
-                    val title = document.getString("title") ?: "Latest Update"
-                    val message = document.getString("message") ?: "No message"
-
-                    tvLatestTitle.text = title
-                    tvLatestMessage.text = message
-                } else {
-                    tvLatestTitle.text = "Latest Update"
-                    tvLatestMessage.text = "No updates"
-                }
-            }
-    }
 
     private fun isUpdatedToday(lastUpdate: Long): Boolean {
         val todayStart = Calendar.getInstance().apply {
@@ -474,40 +484,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-//    private fun loadUserName() {
-//        lifecycleScope.launch {
-//            val lastEntry = db.workDao().getLastEntry()
-//
-//            runOnUiThread {
-//                if (lastEntry != null) {
-//                    setGreeting(lastEntry.name)
-//                } else {
-//                    setGreeting("User")
-//                }
-//            }
-//        }
-//    }
-private fun loadUserName() {
-
-    val sharedPref = getSharedPreferences("LoginPrefs", MODE_PRIVATE)
-
-    val username = sharedPref.getString("username", "User")
-
-    setGreeting(username ?: "User")
-}
-
-    private fun setGreeting(name: String) {
-        val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-
-        val greeting = when (hour) {
-            in 5..11 -> "Good Morning"
-            in 12..16 -> "Good Afternoon"
-            in 17..21 -> "Good Evening"
-            else -> "Good Night"
-        }
-
-        tvGreeting.text = "$greeting, $name"
-    }
 
     private fun showPasswordDialog(targetActivity: Class<*>) {
         val builder = AlertDialog.Builder(this)
@@ -550,7 +526,7 @@ private fun loadUserName() {
 
         val version = packageManager.getPackageInfo(packageName, 0).versionName
         tvVersion.text = "Version: $version"
-        tvDeveloper.text = "Developed by: KRISHNA KUMAR (AP-TEAM)"
+        tvDeveloper.text = "Developed by: KRISHNA KUMAR"
 //        tvContact.text = "Mail: kumarkrishna.er@gmail.com"
 
         val dialog = AlertDialog.Builder(this)
@@ -564,4 +540,298 @@ private fun loadUserName() {
             dialog.dismiss()
         }
     }
+
+    private fun showNotificationDialog() {
+
+        val notifications = getSharedPreferences("Notifications", MODE_PRIVATE)
+            .getStringSet("items", emptySet())
+            ?.toList()
+            ?.sortedDescending()
+            ?: emptyList()
+
+        val message = if (notifications.isEmpty()) {
+            "No notifications received"
+        } else {
+            notifications.joinToString("\n\n")
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle("Notifications")
+            .setMessage(message)
+            .setPositiveButton("OK", null)
+            .show()
+    }
+
+    //==============================  checkAppLicense  ======================================
+    private val trialMillis = 10000L // 10 seconds for testing
+//    private val trialMillis = 15L * 24 * 60 * 60 * 1000
+
+    private fun checkAppLicense() {
+        val prefs = getSharedPreferences("LicensePrefs", MODE_PRIVATE)
+
+        val installDate = prefs.getLong("installDate", 0L)
+        val isActivated = prefs.getBoolean("isActivated", false)
+
+        val today = System.currentTimeMillis()
+
+        if (isActivated) return
+
+        if (installDate == 0L) {
+            prefs.edit().putLong("installDate", today).apply()
+            return
+        }
+
+        val usedTime = today - installDate
+
+        if (usedTime >= trialMillis) {
+            showActivationDialog()
+        }
+    }
+
+    private fun showActivationDialog() {
+        val input = EditText(this)
+        input.hint = "Enter activation code"
+
+        AlertDialog.Builder(this)
+            .setTitle("Trial Expired")
+            .setMessage("Your trial period is over. Please enter activation code.")
+            .setView(input)
+            .setCancelable(false)
+            .setPositiveButton("Activate", null)
+            .show()
+            .apply {
+                getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                    val code = input.text.toString().trim()
+
+                    if (code.isEmpty()) {
+                        Toast.makeText(this@MainActivity, "Enter license code", Toast.LENGTH_SHORT).show()
+                    } else {
+                        verifyLicenseFromGoogleSheet(code)
+                    }
+
+                }
+            }
+    }
+
+
+
+    private fun showLicenseDialog() {
+        val prefs = getSharedPreferences("LicensePrefs", MODE_PRIVATE)
+
+        val isActivated = prefs.getBoolean("isActivated", false)
+        val installDate = prefs.getLong("installDate", 0L)
+        val today = System.currentTimeMillis()
+
+        val message = if (isActivated) {
+            """
+        License Status : Activated ✓
+        
+        License Type : Lifetime
+        
+        Thank you for using Work Easy.
+        """.trimIndent()
+        } else {
+            val usedTime = today - installDate
+            val remainingMillis = (trialMillis - usedTime).coerceAtLeast(0L)
+//            val remainingSeconds = remainingMillis / 1000
+            val days = remainingMillis / (1000 * 60 * 60 * 24)
+
+            val hours = (remainingMillis / (1000 * 60 * 60)) % 24
+
+            val minutes = (remainingMillis / (1000 * 60)) % 60
+
+            """
+        License Status : Trial Version
+        
+        Time Remaining : ${days}d ${hours}h ${minutes}m
+        
+        Activation Required After Trial Period
+        """.trimIndent()
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle("Work Easy License")
+            .setMessage(message)
+            .setPositiveButton("OK", null)
+            .show()
+    }
+
+
+    private fun getAndroidDeviceId(): String {
+        return Settings.Secure.getString(
+            contentResolver,
+            Settings.Secure.ANDROID_ID
+        )
+    }
+
+    private fun verifyLicenseFromGoogleSheet(code: String) {
+        lifecycleScope.launch {
+            try {
+                val loginPrefs = getSharedPreferences("LoginPrefs", MODE_PRIVATE)
+                val userName = loginPrefs.getString("username", "User") ?: "User"
+
+                val deviceId = getAndroidDeviceId()
+
+                val json = """
+                {
+                    "reportType": "license_check",
+                    "code": "$code",
+                    "userName": "$userName",
+                    "deviceId": "$deviceId"
+                }
+            """.trimIndent()
+
+                val body = json.toRequestBody("application/json".toMediaType())
+
+                val request = Request.Builder()
+                    .url(licenseUrl)
+                    .post(body)
+                    .build()
+
+                val response = withContext(Dispatchers.IO) {
+                    OkHttpClient().newCall(request).execute()
+                }
+
+                val result = response.body?.string() ?: ""
+
+                val resultText = org.json.JSONObject(result).getString("result")
+
+                when (resultText) {
+
+                    "VALID" -> {
+                        getSharedPreferences("LicensePrefs", MODE_PRIVATE)
+                            .edit()
+                            .putBoolean("isActivated", true)
+                            .putString("licenseCode", code)
+                            .putString("userName", userName)
+                            .putString("deviceId", deviceId)
+                            .apply()
+
+                        Toast.makeText(this@MainActivity, "Activated successfully", Toast.LENGTH_SHORT).show()
+                        recreate()
+                    }
+
+                    "ALREADY_USED" -> {
+                        Toast.makeText(this@MainActivity, "Code already used on another device", Toast.LENGTH_LONG).show()
+                    }
+
+                    "INACTIVE" -> {
+                        Toast.makeText(this@MainActivity, "License inactive", Toast.LENGTH_LONG).show()
+                    }
+
+                    "INVALID" -> {
+                        Toast.makeText(this@MainActivity, "Invalid license code", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+            } catch (e: Exception) {
+                Toast.makeText(this@MainActivity, "Internet required for activation", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    //====================================== Banner post ============================================================
+
+
+
+    private fun loadBanners() {
+
+        val bannerViewPager = findViewById<ViewPager2>(R.id.bannerViewPager)
+
+        val request = Request.Builder()
+            .url(bannerUrl)
+            .build()
+
+        OkHttpClient().newCall(request).enqueue(object : Callback {
+
+            override fun onResponse(call: Call, response: Response) {
+
+                val json = response.body?.string() ?: return
+                Log.d("BANNER_RESPONSE", json)
+
+                if (!json.trim().startsWith("[")) {
+                    Log.e("BANNER_ERROR", "Invalid response: $json")
+                    return
+                }
+
+                val array = JSONArray(json)
+                val bannerList = mutableListOf<BannerItem>()
+
+                for (i in 0 until array.length()) {
+                    val obj = array.getJSONObject(i)
+
+                    bannerList.add(
+                        BannerItem(
+                            title = obj.getString("title"),
+                            imageUrl = obj.getString("imageUrl")
+                        )
+                    )
+                }
+
+                runOnUiThread {
+
+                    val infiniteList = mutableListOf<BannerItem>()
+
+                    repeat(100) {
+                        infiniteList.addAll(bannerList)
+                    }
+
+                    bannerViewPager.adapter = BannerAdapter(infiniteList)
+
+                    // Start from middle
+                    bannerViewPager.setCurrentItem(infiniteList.size / 2, false)
+
+                    sliderHandler.removeCallbacks(sliderRunnable)
+                    sliderHandler.postDelayed(sliderRunnable, 3000)
+                }
+            }
+
+            override fun onFailure(call: Call, e: IOException) {
+                Log.e("BANNER_ERROR", "Failed: ${e.message}")
+            }
+        })
+    }
+
+
+
+
+    override fun onDestroy() {
+        sliderHandler.removeCallbacks(sliderRunnable)
+        super.onDestroy()
+    }
+
+    private fun loadRunningText() {
+
+        val tvRunningText = findViewById<TextView>(R.id.tvRunningText)
+
+        val request = Request.Builder()
+            .url(noticeUrl)
+            .build()
+
+        OkHttpClient().newCall(request).enqueue(object : Callback {
+
+            override fun onResponse(call: Call, response: Response) {
+
+                val json = response.body?.string() ?: return
+                val obj = JSONObject(json)
+                val message = obj.getString("message")
+
+                runOnUiThread {
+                    tvRunningText.text = message
+                    tvRunningText.isSelected = true
+                }
+            }
+
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+            }
+        })
+    }
+
+
+
+
+
 }
+
+

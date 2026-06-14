@@ -16,24 +16,24 @@ android {
         applicationId = "com.example.myapplication"
         minSdk = 26
         targetSdk = 36
-        versionCode = 15
-        versionName = "1.2.15"
+        versionCode = 18
+        versionName = "1.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-
-
-
     buildTypes {
         release {
             isMinifyEnabled = false
+            isShrinkResources = false
+            isDebuggable = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -71,7 +71,6 @@ dependencies {
 
 //     Firebase libraries (NO version needed)
     implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
-
     implementation("com.google.firebase:firebase-messaging-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
 
@@ -84,6 +83,9 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.browser:browser:1.8.0")
+
+    implementation("androidx.viewpager2:viewpager2:1.1.0")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 
 
 
